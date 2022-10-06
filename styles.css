@@ -1,42 +1,240 @@
-body{
-    background-color: rgb(102, 99, 99);
+
+body {
+    background: rgb(207, 205, 228);
+    background: linear-gradient(90deg, rgba(207, 205, 228, 1) 0%, rgba(213, 193, 236, 1) 100%);
+    font-family: 'Quicksand', sans-serif;
 }
-.auth-cont, .reg-cont{
+
+.btn-usual {
+	background-color:#6258e8;
+	border-radius:16px;
+	border:0;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:10px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.btn-usual:hover {
+	background-color:#3252b3;
+}
+.btn-usual:active {
+	position:relative;
+    -webkit-box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
+    -moz-box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
+    box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
+}
+
+.auth, .reg{
+    display: flex;
+}
+
+.auth-cont,
+.reg-cont {
+    margin-top: 50px !important;
     display: flex;
     flex-direction: column;
     width: 500px;
     margin: 0 auto;
-    border: 1px solid black;
+    border-radius:20px;
     padding-top: 30px;
-    padding-bottom: 50px;
+    padding-bottom: 35px;
+    background-color: rgba(224, 224, 224, 0.445);
 }
-.auth-cont button, .reg-cont button{
-    margin-top: 10px !important; 
+
+.btn-main {
+    /* big enter button */
+    background-color: #aa48b5;
+    border-radius: 18px;
+    border: 0;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 16px 31px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #2f6627;
 }
-.auth-cont input, .reg-cont input{
+
+.btn-main:hover {
+    background-color: #9c1c9c;
+}
+
+.btn-main:active {
+    position: relative;
+    top: 1px;
+}
+
+
+.btn-reg-auth, .btn-enter-reg {
+    /* small registration button */
+    position: absolute;
+    background-color: #7b4ab3;
+    border-radius: 18px;
+    border: 0;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 16px 31px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #2f6627;
+    height: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+
+    right: 10px;
+}
+
+.btn-reg-auth:hover, .btn-enter-reg:hover {
+    background-color: #793b9c;
+}
+
+.btn-reg-auth:active, .btn-enter-reg:active {
+    position: absolute;
+    /* position: relative; */
+    margin-top:  1px;
+}
+
+
+
+input {
+    border-color: #cccccc;
+    border-style: solid;
+    border-width: 0px;
+    padding: 8px;
+    font-size: 17px;
+    box-shadow: 3px 3px 13px 0px rgba(42, 42, 42, .49);
+    border-radius: 7px;
+}
+
+input:focus {
+    /* outline: none; */
+    outline: 3px solid rgba(0, 0, 0, 0.144);
+    
+}
+
+
+button{
+    box-shadow: 3px 3px 13px 0px rgba(42, 42, 42, .49);
+    font-weight: lighter;
+}
+.bottom_btn{
+
+}
+
+
+
+
+
+.auth-cont button,
+.reg-cont button {
+    margin-top: 10px !important;
+}
+
+.auth-cont input,
+.reg-cont input {
     width: 400px;
     margin: 0 auto;
     height: 30px;
-    margin-top: 5px;
+    margin-top: 7px;
 }
-.auth-password-input, .reg-password-input{
+
+.auth-password-input,
+.reg-password-input {
     margin-bottom: 10px !important;
 }
 
-    
-.auth-cont h2, .reg-cont h2{
+h2{
+    margin-bottom: 10px !important;
+    font-weight: 600;
+}
+.auth-cont h2,
+.reg-cont h2 {
     margin: 0 auto;
 }
-.auth-cont .btn-enter-auth, .reg-cont .btn-reg-reg{
+
+
+.auth-cont .btn-enter-auth,
+.reg-cont .btn-reg-reg {
     width: 300px;
     height: 50px;
     margin: 0 auto;
 }
-.auth-cont .btn-reg-auth, .reg-cont .btn-enter-reg{
+
+.auth-cont .btn-reg-auth,
+.reg-cont .btn-enter-reg {
     width: 200px;
     margin: 0 auto;
 }
 
-.reg-cont{
+.reg {
     visibility: hidden;
+}
+
+/* _________________________________________________________________________ */
+/* блок с аккаунтом пользователя */
+
+.user-account p {
+    text-align: center;
+    margin: 5px;
+}
+
+.user-transactions{
+    margin-top: 100px !important;
+    max-width: fit-content;
+    margin: 0 auto;
+}
+.btn-exit{
+    position: absolute;
+    top: 0;
+    right: 10px;
+}
+.btn-exit:hover{
+    position: absolute;
+    -webkit-box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
+    -moz-box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
+    box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
+}
+.transact-div{
+    display: flex;
+    border:1px solid black
+}
+td{
+    border:1px solid black;
+    width: 30px;
+}
+.transact-item{
+    max-height: 50px;
+    padding: 0;
+}
+.transact-item td{
+    max-height: 50px;
+
+}
+.id-tr {
+    text-align: center;
+}
+.sender-receiver{
+    width: 300px;
+}
+.tr-sum{
+    width: 100px;
+}
+.tr-status{
+    width: 100px;
+}
+.tr-btn-accept{
+    margin-left: 10px;
+    margin-right: 10px;
+
+    padding-left: 10px;
+    padding-right: 10px;
 }

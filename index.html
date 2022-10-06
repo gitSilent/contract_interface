@@ -6,27 +6,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authorization</title>
     <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./src/variables.js"  ></script>
+    <script type="module" src="./src/hideShowAuth.js"  ></script>
     <script src="./web3_min.js" defer></script>
-    <script src="./main.js" defer></script>
+    <script type="module" src="./main.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
 
 </head>
 <body>
     
-    <div class="auth-cont">
-        <h2 class="h2-auth">Авторизация</h2>
-        <input type="text" class="auth-login-input" placeholder="Enter your login">
-        <input type="text" class="auth-password-input" placeholder="Enter your password">
-        <button class="btn-enter-auth">Войти</button>
-        <button class="btn-reg-auth">Регистрация</button>
+    <!-- Слой с окном авторизации -->
+    <div class="auth">
+        <form class="auth-cont">
+            <h2 class="h2-auth">Авторизация</h2>
+            <input type="text" class="auth-login-input" placeholder="Enter your login">
+            <input type="text" class="auth-password-input" placeholder="Enter your password">
+            <button class="btn-enter-auth btn-main">Войти</button>
+        </form>
+            <button class="btn-reg-auth bottom_btn">Регистрация</button>
     </div>
 
-    <div class="reg-cont">
+    <!-- Слой с окном регистрации -->
+<div class="reg">
+    <form class="reg-cont">
         <h2 class="h2-reg">Регистрация</h2>
-        <input type="text" class="reg-login-input">
-        <input type="text" class="reg-password-input">
-        <button class="btn-reg-reg">Зарегистрироваться</button>
-        <button class="btn-enter-reg">Войти</button>
+        <input type="text" class="reg-login-input" placeholder="Enter your login">
+        <input type="text" class="reg-password-input" placeholder="Enter your password">
+        <button class="btn-reg-reg btn-main">Зарегистрироваться</button>
+    </form>
+        <button class="btn-enter-reg bottom_btn">Войти</button>
+</div>
+
+<!-- Слой с личным кабинетом пользователя -->
+<div class="user-account" style="visibility: hidden;">
+    <h2 class="user-address">Адрес пользователя</h2>
+    <h3 class="user-role">Ваш статус</h3>
+    <button class="add-transact btn-usual">Создать транзакцию</button>
+    <!-- Список транзакций пользователя -->
+    <div class="user-transactions">
+        <h2>Ваши транзакции</h2>
+        <table class="transactions-ul">
+            <thead>
+                <tr>
+                    <th colspan="5"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="transact-item">
+                    <div class="transact-div">
+                        <td>
+                            <p class="id-tr">1</p>
+                        </td>
+                        <td>
+                            <div class="sender-receiver">
+                                <p class="sender">sender address</p>
+                                <p class="reciever">reciever address</p>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="tr-sum">1 eth</p>
+                        </td>
+                        <td>
+                            <p class="tr-status">active</p>
+                        </td>
+                        <td>
+                            <button class="tr-btn-accept btn-usual">Принять платеж</button>
+                        </td>
+                    </div>
+                </tr>
+            </tbody>
+        </table>
     </div>
+    <button class="btn-exit btn-usual">Выход</button>
+
+
+
+</div>
+
+
+    
 
 </body>
 </html>

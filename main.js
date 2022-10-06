@@ -1,6 +1,8 @@
-console.log("hi");
+import {showAuthorization,hideAuthorization,showLogining, showRegistration} from './src/hideShowAuth.js' // импорт функций для отображения/скрытия окна авторизации, входа в аккаунт(отдельно) и регистрации(отдельно) 
+import * as vars from './src/variables.js' // импорт констант с querySelector
 
-let contractAddress = "0x51e4075a30ccaed53E66F985ADF08782C3660E8f";
+console.log("hi");
+let contractAddress = "0xf9661cA8921fEA6c577a625948d38f369b8CDa51";
 
 // const abi = [
 //   {
@@ -370,7 +372,6 @@ let contractAddress = "0x51e4075a30ccaed53E66F985ADF08782C3660E8f";
 //     type: "function",
 //   },
 // ];
-
 const abi = [
 	{
 		"inputs": [
@@ -463,13 +464,6 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "returnValue",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -499,6 +493,35 @@ const abi = [
 		"inputs": [],
 		"stateMutability": "payable",
 		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "categories",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -564,7 +587,7 @@ const abi = [
 	},
 	{
 		"inputs": [],
-		"name": "getTransactionHistory",
+		"name": "getTransactionsHistoryArr",
 		"outputs": [
 			{
 				"components": [
@@ -627,6 +650,80 @@ const abi = [
 				"internalType": "struct transactions.Transaction[]",
 				"name": "",
 				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAdr",
+				"type": "address"
+			}
+		],
+		"name": "getUser",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "password",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "role",
+						"type": "string"
+					}
+				],
+				"internalType": "struct transactions.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "patterns",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "patternName",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "promotions",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "promoted",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -739,36 +836,78 @@ const abi = [
 		"type": "function"
 	}
 ]
-const authEnterBtn = document.querySelector(".btn-enter-auth");
-const authRegBtn = document.querySelector(".btn-reg-auth");
-const authLoginInput = document.querySelector(".auth-login-input");
-const authPasswordInput = document.querySelector(".auth-password-input");
-
-authEnterBtn.addEventListener("click", async () => {
-  let login = authLoginInput.value;
-  let password = authPasswordInput.value;
-  console.log(login, password);
-  await console.log(contractInstance.methods.getUser(login));
-});
 
 let web3, contractInstance;
 
 function network() {
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-  console.log(web3);
-  console.log("u connected to blockchain");
-  contractInstance = new web3.eth.Contract(abi, contractAddress);
+	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+	console.log(web3);
+	console.log("u connected to blockchain");
+	contractInstance = new web3.eth.Contract(abi, contractAddress);
 }
 async function getAccounts() {
-  result = await web3.eth.getAccounts();
-  console.log(result);
-  // getBalance(result[0]);
-  // createUl(result)
+	let result = await web3.eth.getAccounts();
+	console.log(result);
+}
+function enterAccount(user, adr){//вход в аккаунт (отображение страницы с функциями пользователя и администратора )
+	console.log('enter')
+	hideAuthorization();	//скрытие окна авторизации
+	localStorage.setItem('currentUser', adr)// запись адреса текущего пользователя в localStorage
+
+	vars.userAddress.textContent = `Адрес пользователя ${adr}`//заполнение полей на странице данными пользователя
+	vars.userRole.textContent = `Ваш статус ${user.role}`
+	console.log('func')
+
+
 }
 
+// console.log(localStorage.getItem('currentUser') != null)
 network();
-
 getAccounts();
+
+(async () => {//функция для стартовой отрисовки страницы в зависимости от нахождения в localStorage данных о текущем пользователе 
+	//если функция не находит в localStorage адреса пользователя, то отрисовывает окно авторизации
+	try {
+		let user = await contractInstance.methods.getUser(localStorage.getItem('currentUser')).call({ from: "0x6A44f16601Cb9dE2E28b1ACa38518eD9E560F77e" })
+		enterAccount(user, localStorage.getItem('currentUser'))
+		console.log('async')
+	} catch {
+		console.log('catch')
+		showAuthorization();
+	}
+})()
+					
+
+
+
+vars.authForm.addEventListener("submit", async () => {//слушатель событий на форму авторизации
+	event.preventDefault();
+	let login = vars.authLoginInput.value;
+	let password = vars.authPasswordInput.value;
+	
+	let responseAccount = await contractInstance.methods.getUser(login).call({ from: "0x6A44f16601Cb9dE2E28b1ACa38518eD9E560F77e" });
+	console.log(responseAccount)
+	if(responseAccount.password == password){//проверка валидности логина и пароля в соответствии с маппингом контракта
+		console.log("successful enter")
+		console.log()
+		enterAccount(responseAccount, login)
+	}else{
+		console.log("wrong password or/and login")
+	}
+});
+vars.authRegBtn.addEventListener('click', ()=>{ // событие на кнопку Регистрации на странице Авторизации
+	showRegistration()
+})
+vars.regEnterBtn.addEventListener('click', ()=>{// событие на кнопку Войти на странице Авторизации
+	showLogining()
+})
+vars.btnExit.addEventListener('click', ()=>{// событие на кнопку Выход на странице аккаунта пользователя
+	showAuthorization()
+
+})
+
+
+
 
 console.log(contractInstance, contractInstance.methods);
 // console.log(contractInstance, contractInstance.methods.transactionHistory());
