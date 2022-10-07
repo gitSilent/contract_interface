@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authorization</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./src/variables.js"></script>
+    <script type="module" src="./src/createAdminPanel.js"></script>
+    <script type="module" src="./src/hideShowAuth.js"></script>
+    <script src="./web3_min.js" defer></script>
+    <script type="module" src="./main.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="auth">
+      <form class="auth-cont">
+        <h2 class="h2-auth">Авторизация</h2>
+        <input
+          type="text"
+          class="auth-login-input"
+          placeholder="Enter your login"
+        />
+        <input
+          type="text"
+          class="auth-password-input"
+          placeholder="Enter your password"
+        />
+        <button class="btn-enter-auth btn-main">Войти</button>
+      </form>
+      <button class="btn-reg-auth bottom_btn">Регистрация</button>
+    </div>
+
+    <div class="reg">
+      <form class="reg-cont">
+        <h2 class="h2-reg">Регистрация</h2>
+        <input
+          type="text"
+          class="reg-login-input"
+          placeholder="Enter your login"
+        />
+        <input
+          type="text"
+          class="reg-password-input"
+          placeholder="Enter your password"
+        />
+        <button class="btn-reg-reg btn-main">Зарегистрироваться</button>
+      </form>
+      <button class="btn-enter-reg bottom_btn">Войти</button>
+    </div>
+
+    <div class="user-account" style="visibility: visible">
+      <h2 class="user-address">Адрес пользователя</h2>
+      <h3 class="user-role">Ваш статус</h3>
+      <button class="add-transact btn-usual">Создать транзакцию</button>
+      <div class="user-transactions">
+        <h2>Ваши транзакции</h2>
+        <table class="transactions-ul">
+          <thead>
+            <tr>
+              <th colspan="5"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="transact-item">
+              <div class="transact-div">
+                <td>
+                  <p class="id-tr">1</p>
+                </td>
+                <td>
+                  <div class="sender-receiver">
+                    <p class="sender">sender address</p>
+                    <p class="reciever">reciever address</p>
+                  </div>
+                </td>
+                <td>
+                  <p class="tr-sum">1 eth</p>
+                </td>
+                <td>
+                  <p class="tr-status">active</p>
+                </td>
+                <td>
+                  <button class="tr-btn-accept btn-usual">
+                    Принять платеж
+                  </button>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="btn-showAllTransactions btn-usual">
+        показать все транзакции
+      </button>
+      <button class="btn-exit btn-usual">Выход</button>
+    </div>
+
+    <div class="layer-modal-addTransaction" >
+      <div class="modal-addTransaction">
+        <h3>Создание транзакции</h3>
+        <div class="added-info">
+          <input
+            type="text"
+            class="input-recieverAddress"
+            placeholder="Адрес получателя"
+          />
+          <input
+            type="text"
+            class="input-transactionSum"
+            placeholder="Сумма транзакции"
+          />
+          <div class="safety-div">
+            <input type="checkbox" class="input-checkbox-safetyTransact" />
+            <p>Safety Transaction</p>
+          </div>
+          <input
+            type="text"
+            class="input-codeWord"
+            placeholder="Кодовое слово"
+          />
+          <input
+            type="text"
+            class="input-desc"
+            placeholder="Описание транзакции"
+          />
+          <button class="btn-sendTransactions btn-usual">Отправить</button>
+        </div>
+
+        <img
+          src="./src/png/cross.png"
+          alt=""
+          class="img-modal-addTransaction-cross"
+        />
+      </div>
+    </div>
+  </body>
+</html>
