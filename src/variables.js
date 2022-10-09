@@ -19,6 +19,32 @@ export const regPasswordInput = document.querySelector(".reg-password-input");
 export const userAccount = document.querySelector('.user-account')
 export const userAddress = document.querySelector('.user-address')
 export const userRole = document.querySelector('.user-role')
+export const userBalance = document.querySelector('.user-balance')
+export const userTransactions = document.querySelector('.user-transactions')
+export const tableBodyUserTransactions = document.querySelector('.table-body-userTransactions')
+
 
 export const btnExit = document.querySelector('.btn-exit');
+export const btnShowAllTranasctions = document.querySelector('.btn-showAllTransactions');
+export const btnAddTransact = document.querySelector('.add-transact');
+
+
+export const layerModalAddTransaction = document.querySelector('.layer-modal-addTransaction')
+export const inputRecieverAddress = document.querySelector('.input-recieverAddress')
+export const inputTransactionSum = document.querySelector('.input-transactionSum')
+export const inputCheckboxSafetyTransact = document.querySelector('.input-checkbox-safetyTransact')
+export const inputCodeWord = document.querySelector('.input-codeWord')
+export const inputDesc = document.querySelector('.input-desc')
+export const btnSendTransactions = document.querySelector('.btn-sendTransactions')
+export const imgAddTransactCross = document.querySelector('.img-modal-addTransaction-cross')
+
+export const tableBodyAllTransactions = document.querySelector('.table-body-allTransactions')
+export const imgAllTransactCross = document.querySelector('.img-modal-allTransaction-cross')
+export const layerModalAllTransactions = document.querySelector('.layer-modal-allTransactions')
+
+export const modalRecieveTransaction = document.querySelector('.modal-recieveTransaction');
+export const layerModalRecieveTransaction = document.querySelector('.layer-modal-recieveTransaction');
+export const imgModalReceiveTransactionCross = document.querySelector('.img-modal-receiveTransaction-cross');
+export const transactionField = document.querySelector('.transaction-field');
+
 

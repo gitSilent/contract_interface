@@ -1,8 +1,21 @@
-import {showAuthorization,hideAuthorization,showLogining, showRegistration} from './src/hideShowAuth.js' // импорт функций для отображения/скрытия окна авторизации, входа в аккаунт(отдельно) и регистрации(отдельно) 
-import * as vars from './src/variables.js' // импорт констант с querySelector
-
+import {
+  showAuthorization,
+  hideAuthorization,
+  showLogining,
+  showRegistration,
+  hideCreateTransact,
+  showCreateTransact,
+  hideAllTransactions,
+  showAllTransactions,
+  hideReceiveTransaction,
+} from "./src/hideShowElements.js"; // импорт функций для отображения/скрытия окна авторизации, входа в аккаунт(отдельно) и регистрации(отдельно)
+import * as vars from "./src/variables.js"; // импорт констант с querySelector
+import { createAdminPanel } from "./src/createAdminPanel.js";
+import {fillAllTransactions} from "./src/fillAllTransactions.js"
+import {fillUserTransactions} from "./src/fillUserTransactions.js"
 console.log("hi");
-let contractAddress = "0xf9661cA8921fEA6c577a625948d38f369b8CDa51";
+
+let contractAddress = "0xB6Ed42Ab5Ba7E82FB36bb60B2003A0e29C4dd413";
 
 // const abi = [
 //   {
@@ -451,6 +464,24 @@ const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "adr",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "password",
+				"type": "string"
+			}
+		],
+		"name": "registration",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "returnMsgValue",
 		"outputs": [
@@ -837,77 +868,167 @@ const abi = [
 	}
 ]
 
-let web3, contractInstance;
+let web3, contractInstance, curUser;
 
 function network() {
-	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-	console.log(web3);
-	console.log("u connected to blockchain");
-	contractInstance = new web3.eth.Contract(abi, contractAddress);
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+  console.log(web3);
+  console.log("u connected to blockchain");
+  contractInstance = new web3.eth.Contract(abi, contractAddress);
+  console.log(contractInstance);
 }
+
 async function getAccounts() {
-	let result = await web3.eth.getAccounts();
-	console.log(result);
+  let result = await web3.eth.getAccounts();
+  console.log(result);
 }
-function enterAccount(user, adr){//вход в аккаунт (отображение страницы с функциями пользователя и администратора )
-	console.log('enter')
-	hideAuthorization();	//скрытие окна авторизации
-	localStorage.setItem('currentUser', adr)// запись адреса текущего пользователя в localStorage
 
-	vars.userAddress.textContent = `Адрес пользователя ${adr}`//заполнение полей на странице данными пользователя
-	vars.userRole.textContent = `Ваш статус ${user.role}`
-	console.log('func')
+//вход в аккаунт (отображение страницы с функциями пользователя и администратора )
+function enterAccount(user, adr, balance) {
+  
+  console.log("enter");
+  hideAuthorization(); //скрытие окна авторизации
+  
 
+  localStorage.setItem("currentUser", adr); // запись адреса текущего пользователя в localStorage
 
+  vars.userAddress.textContent = `Адрес пользователя ${adr}`; //заполнение полей на странице данными пользователя
+  vars.userRole.textContent = `Ваш статус ${user.role}`;
+  vars.userBalance.textContent = `Ваш баланс ${balance} eth`;
+  console.log("func");
 }
+function getAllTransacts(){
+  return(contractInstance.methods
+    .getTransactionsHistoryArr()
+    .call({ from: curUser })
+    .then((val)=>{return val})
+  ) }
+    // console.log(allTransactions)
+    // return await allTransactions;
+  
+  
+  // return (await allTransactions)
+
+
 
 // console.log(localStorage.getItem('currentUser') != null)
 network();
 getAccounts();
 
-(async () => {//функция для стартовой отрисовки страницы в зависимости от нахождения в localStorage данных о текущем пользователе 
-	//если функция не находит в localStorage адреса пользователя, то отрисовывает окно авторизации
-	try {
-		let user = await contractInstance.methods.getUser(localStorage.getItem('currentUser')).call({ from: "0x6A44f16601Cb9dE2E28b1ACa38518eD9E560F77e" })
-		enterAccount(user, localStorage.getItem('currentUser'))
-		console.log('async')
-	} catch {
-		console.log('catch')
-		showAuthorization();
-	}
-})()
-					
+
+//функция для стартовой отрисовки страницы в зависимости от нахождения в localStorage данных о текущем пользователе
+//если функция не находит в localStorage адреса пользователя, то отрисовывает окно авторизации
+(async () => {
+  try {
+    curUser = localStorage.getItem("currentUser");
+
+    let userBalance = await web3.eth.getBalance(curUser);
+    userBalance = web3.utils.fromWei(userBalance);
+
+    let user = await contractInstance.methods
+      .getUser(curUser)
+      .call({ from: curUser });
+    enterAccount(user, localStorage.getItem("currentUser"), userBalance);
+
+    // fillUserTransactions()
+    console.log("async");
+    console.log(user);
+  } catch {
+    console.log("catch");
+    showAuthorization();
+  }
+})();
+
+getAllTransacts()
+  .then((arr)=>{
+    fillAllTransactions(arr,curUser,web3)
+    fillUserTransactions(arr,curUser,web3)
+
+  })
+
+vars.authForm.addEventListener("submit", async () => {
+  //слушатель событий на форму авторизации
+  event.preventDefault();
+  let login = vars.authLoginInput.value;
+  let password = vars.authPasswordInput.value;
+  let userBalance = await web3.eth.getBalance(login);
+  userBalance = web3.utils.fromWei(userBalance);
+
+  let responseAccount = await contractInstance.methods
+        .getUser(login)
+        .call({ from: "0x455cfFeA5e0C022C2864d4005aFfB3edA74c3f70" });
+    console.log(responseAccount);
+    if (responseAccount.password == password) {
+        //проверка валидности логина и пароля в соответствии с маппингом контракта
+        console.log("successful enter");
+        console.log();
+        location.reload()
+        enterAccount(responseAccount, login,userBalance);
 
 
 
-vars.authForm.addEventListener("submit", async () => {//слушатель событий на форму авторизации
-	event.preventDefault();
-	let login = vars.authLoginInput.value;
-	let password = vars.authPasswordInput.value;
-	
-	let responseAccount = await contractInstance.methods.getUser(login).call({ from: "0x6A44f16601Cb9dE2E28b1ACa38518eD9E560F77e" });
-	console.log(responseAccount)
-	if(responseAccount.password == password){//проверка валидности логина и пароля в соответствии с маппингом контракта
-		console.log("successful enter")
-		console.log()
-		enterAccount(responseAccount, login)
-	}else{
-		console.log("wrong password or/and login")
-	}
+    } else {
+        console.log("wrong password or/and login");
+    }
 });
-vars.authRegBtn.addEventListener('click', ()=>{ // событие на кнопку Регистрации на странице Авторизации
-	showRegistration()
-})
-vars.regEnterBtn.addEventListener('click', ()=>{// событие на кнопку Войти на странице Авторизации
-	showLogining()
-})
-vars.btnExit.addEventListener('click', ()=>{// событие на кнопку Выход на странице аккаунта пользователя
-	showAuthorization()
+
+vars.authRegBtn.addEventListener("click",showRegistration)
+  // событие на кнопку Регистрации на странице Авторизации
+  
+vars.regEnterBtn.addEventListener("click",showLogining)
+  // событие на кнопку Войти на странице Авторизации
+
+vars.btnExit.addEventListener("click",()=>{
+  showAuthorization();
+  vars.tableBodyUserTransactions.innerHTML = "";
+}
+)
+  // событие на кнопку Выход на странице аккаунта пользователя
+
+vars.btnShowAllTranasctions.addEventListener("click", async () => {
+  console.log("__________");
+  // console.log(  getAllTransacts().then((val)=>{return val})  );
+  getAllTransacts()
+  .then((arr)=>{fillAllTransactions(arr,curUser,web3)})
+  showAllTransactions();
+  console.log("__________");
+});
+
+vars.imgAddTransactCross.addEventListener("click",hideCreateTransact);
+
+vars.btnAddTransact.addEventListener("click", showCreateTransact)
+
+vars.btnSendTransactions.addEventListener("click", async()=>{
+  await contractInstance.methods.createTransaction(
+    vars.inputRecieverAddress.value,
+    web3.utils.toWei(vars.inputTransactionSum.value, 'ether'),
+    vars.inputCodeWord.value,
+    vars.inputCheckboxSafetyTransact.checked,
+    vars.inputDesc.value)
+  .send({from: curUser, value:web3.utils.toWei(vars.inputTransactionSum.value, 'ether'), gas:3000000})
+console.log('clicked send')
 
 })
 
+vars.imgAllTransactCross.addEventListener('click', hideAllTransactions)
+vars.imgModalReceiveTransactionCross.addEventListener('click', hideReceiveTransaction)
 
 
+/**
+ * @type {HTMDivLElement}
+ */
+const modal = document.querySelector(".layer-modal-addTransaction");
+
+// document.addEventListener("keydown", (evt) => {
+//   if (evt.key === "Escape") {
+//     console.dir(modal);
+//     if (!modal.style.display) {
+//       modal.style.display = "none";
+//     } else {
+//       modal.style.display = "";
+//     }
+//   }
+// });
 
 console.log(contractInstance, contractInstance.methods);
 // console.log(contractInstance, contractInstance.methods.transactionHistory());
@@ -926,26 +1047,25 @@ console.log(contractInstance, contractInstance.methods);
 //     console.log(result);
 //   });
 
+contractInstance.methods
+  .qtyAdmins()
+  .call()
+  .then((result) => {
+    console.log(result);
+  });
 
-
-
-contractInstance.methods.qtyAdmins().call()
-	.then((result) => {
-		console.log(result)
-	})
-
-contractInstance.methods.users("0xc3d05f966BAE416Bd72Abc62ed81A5096F0E5FaA").call({ from: "0xc3d05f966BAE416Bd72Abc62ed81A5096F0E5FaA" })
-	.then((result) => {
-		console.log(result)
-	})	
-
-
+contractInstance.methods
+  .users("0xc3d05f966BAE416Bd72Abc62ed81A5096F0E5FaA")
+  .call({ from: "0xc3d05f966BAE416Bd72Abc62ed81A5096F0E5FaA" })
+  .then((result) => {
+    console.log(result);
+  });
 
 // console.log(contract_name.getTransactionHistory())
 
 // (async() => {
 // 	console.log(await contractInstance.methods.users("0xc3d05f966BAE416Bd72Abc62ed81A5096F0E5FaA").call())
-  
-    // console.log(result);
+
+// console.log(result);
 
 // })()

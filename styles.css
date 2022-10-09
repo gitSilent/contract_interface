@@ -1,8 +1,20 @@
 
+html{
+    height: 100%;
+
+}
 body {
+    padding: 0 !important;
+    margin: 0 !important;
     background: rgb(207, 205, 228);
     background: linear-gradient(90deg, rgba(207, 205, 228, 1) 0%, rgba(213, 193, 236, 1) 100%);
     font-family: 'Quicksand', sans-serif;
+    position: relative;
+    height: 100%;
+    display: block;
+    
+    overflow-y: hidden;
+
 }
 
 .btn-usual {
@@ -153,6 +165,7 @@ button{
 }
 
 h2{
+    margin: 0;
     margin-bottom: 10px !important;
     font-weight: 600;
 }
@@ -182,15 +195,24 @@ h2{
 /* _________________________________________________________________________ */
 /* блок с аккаунтом пользователя */
 
+.user-account{
+    position: relative;
+}
 .user-account p {
     text-align: center;
     margin: 5px;
+}
+.add-transact{
+    margin: 0 auto;
+    width: max-content;
 }
 
 .user-transactions{
     margin-top: 100px !important;
     max-width: fit-content;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 .btn-exit{
     position: absolute;
@@ -203,6 +225,11 @@ h2{
     -moz-box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
     box-shadow: 0px 2px 26px 24px rgba(5, 8, 11, 0.2) inset;
 }
+.btn-showAllTransactions{
+   width: fit-content;
+   margin: 0 auto;
+   margin-top: 10px; 
+}
 .transact-div{
     display: flex;
     border:1px solid black
@@ -210,6 +237,7 @@ h2{
 td{
     border:1px solid black;
     width: 30px;
+    text-align: center;
 }
 .transact-item{
     max-height: 50px;
@@ -223,7 +251,7 @@ td{
     text-align: center;
 }
 .sender-receiver{
-    width: 300px;
+    width: fit-content;
 }
 .tr-sum{
     width: 100px;
@@ -237,4 +265,142 @@ td{
 
     padding-left: 10px;
     padding-right: 10px;
+}
+
+/* _______________________________________________ */
+/* Модальное окно добавления транзакции */
+.layer-modal-addTransaction{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.466);
+    padding-top: 100px;
+}
+.modal-addTransaction{
+    border:0;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: rgb(238, 238, 238);
+    border-radius: 10px;
+}
+.modal-addTransaction h3{
+    margin: 0 auto;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.added-info{
+    margin-top: 10px !important;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+.modal-addTransaction{
+    padding-top: 50px;
+    position: relative;
+}
+.modal-addTransaction input{
+    margin-bottom: 10px;
+}
+.input-checkbox-safetyTransact{
+    box-shadow: none;
+    width: fit-content !important;
+    height: max-content;
+    margin-top: auto;
+    margin-bottom: auto !important; 
+}
+.safety-div{
+    display: flex;
+    vertical-align: middle;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.img-modal-addTransaction-cross{
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.img-modal-addTransaction-cross:hover{
+    cursor: pointer;
+}
+
+/* Модальное окно с отображением всех транзакций */
+.layer-modal-allTransactions{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.349);
+    position: absolute; 
+    top: 0;;
+}
+
+.modal-allTransactions{
+    width: 800px;
+    height: 600px;
+    background-color: #fff;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding: 50px;
+    position: relative;
+}
+.modal-allTransactions .transact-item{
+    width: 600px;
+}
+.modal-allTransactions .sender-receiver{
+    width: fit-content !important;
+}
+.layer-modal-allTransactions .transactions{
+    margin: 0 auto;
+}
+.img-modal-allTransaction-cross{
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.img-modal-allTransaction-cross:hover{
+    cursor: pointer;
+}
+
+
+
+/* Модальное окно получения транзакции */
+
+.layer-modal-recieveTransaction{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.438);
+    position: absolute;
+    top: 0;
+}
+
+.modal-recieveTransaction{
+    width: 500px;
+    height: 600px;
+    background-color: #fff;
+    margin: 0 auto;
+    margin-top: 50px;
+    position: relative;
+    padding: 50px;
+}
+.img-modal-receiveTransaction-cross{
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.img-modal-receiveTransaction-cross:hover{
+    cursor: pointer;
+}
+.input-receive-codeWord{
+    margin-top: 10px;
+}
+.btn-receive-transaction{
+    margin-top: 10px;
 }

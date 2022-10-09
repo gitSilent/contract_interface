@@ -1,92 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Authorization</title>
-    <link rel="stylesheet" href="./styles.css">
-    <script type="module" src="./src/variables.js"  ></script>
-    <script type="module" src="./src/hideShowAuth.js"  ></script>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./src/variables.js"></script>
+    <script type="module" src="./src/fillAllTransactions.js"></script>
+    <script type="module" src="./src/fillReceiveTransaction.js"></script>
+    <script type="module" src="./src/createAdminPanel.js"></script>
+    <script type="module" src="./src/hideShowElements.js"></script>
     <script src="./web3_min.js" defer></script>
     <script type="module" src="./main.js" defer></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
-
-</head>
-<body>
-    
-    <!-- Слой с окном авторизации -->
-    <div class="auth">
-        <form class="auth-cont">
-            <h2 class="h2-auth">Авторизация</h2>
-            <input type="text" class="auth-login-input" placeholder="Enter your login">
-            <input type="text" class="auth-password-input" placeholder="Enter your password">
-            <button class="btn-enter-auth btn-main">Войти</button>
-        </form>
-            <button class="btn-reg-auth bottom_btn">Регистрация</button>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+<!-- Окно авторизации системе -->
+    <div class="auth" style="visibility: hidden">
+      <form class="auth-cont">
+        <h2 class="h2-auth">Авторизация</h2>
+        <input
+          type="text"
+          class="auth-login-input"
+          placeholder="Enter your login"
+        />
+        <input
+          type="text"
+          class="auth-password-input"
+          placeholder="Enter your password"
+        />
+        <button class="btn-enter-auth btn-main">Войти</button>
+      </form>
+      <button class="btn-reg-auth bottom_btn">Регистрация</button>
     </div>
 
-    <!-- Слой с окном регистрации -->
-<div class="reg">
-    <form class="reg-cont">
+<!-- Окно регистрации в системе -->
+    <div class="reg" style="visibility: hidden">
+      <form class="reg-cont">
         <h2 class="h2-reg">Регистрация</h2>
-        <input type="text" class="reg-login-input" placeholder="Enter your login">
-        <input type="text" class="reg-password-input" placeholder="Enter your password">
+        <input
+          type="text"
+          class="reg-login-input"
+          placeholder="Enter your login"
+        />
+        <input
+          type="text"
+          class="reg-password-input"
+          placeholder="Enter your password"
+        />
         <button class="btn-reg-reg btn-main">Зарегистрироваться</button>
-    </form>
-        <button class="btn-enter-reg bottom_btn">Войти</button>
-</div>
-
-<!-- Слой с личным кабинетом пользователя -->
-<div class="user-account" style="visibility: hidden;">
-    <h2 class="user-address">Адрес пользователя</h2>
-    <h3 class="user-role">Ваш статус</h3>
-    <button class="add-transact btn-usual">Создать транзакцию</button>
-    <!-- Список транзакций пользователя -->
-    <div class="user-transactions">
-        <h2>Ваши транзакции</h2>
-        <table class="transactions-ul">
-            <thead>
-                <tr>
-                    <th colspan="5"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="transact-item">
-                    <div class="transact-div">
-                        <td>
-                            <p class="id-tr">1</p>
-                        </td>
-                        <td>
-                            <div class="sender-receiver">
-                                <p class="sender">sender address</p>
-                                <p class="reciever">reciever address</p>
-                            </div>
-                        </td>
-                        <td>
-                            <p class="tr-sum">1 eth</p>
-                        </td>
-                        <td>
-                            <p class="tr-status">active</p>
-                        </td>
-                        <td>
-                            <button class="tr-btn-accept btn-usual">Принять платеж</button>
-                        </td>
-                    </div>
-                </tr>
-            </tbody>
-        </table>
+      </form>
+      <button class="btn-enter-reg bottom_btn">Войти</button>
     </div>
-    <button class="btn-exit btn-usual">Выход</button>
 
+<!-- Окно с аккаунтом пользователя -->
+    <div class="user-account" style="visibility: hidden">
+      <h2 class="user-address">Адрес пользователя</h2>
+      <h3 class="user-role">Ваш статус</h3>
+      <h3 class="user-balance">Ваш баланс</h3>
+      <button class="add-transact btn-usual">Создать транзакцию</button>
+      <div class="user-transactions">
+        <h2>Ваши транзакции</h2>
 
+        <table class="transactions">
+          <thead>
+            <tr>
+              <th colspan="5"></th>
+            </tr>
+          </thead>
+          <tbody class="table-body-userTransactions">
+            
+          </tbody>
+        </table>
+        <button class="btn-showAllTransactions btn-usual">
+          Показать все транзакции
+        </button>
+      </div>
+    
+      <button class="btn-exit btn-usual">Выход</button>
+    </div>
 
+<!-- Модальное окно с добавлением транзакции -->
+    <div class="layer-modal-addTransaction" style="visibility:hidden;" >
+      <div class="modal-addTransaction">
+        <h3>Создание транзакции</h3>
+        <div class="added-info">
+          <input
+            type="text"
+            class="input-recieverAddress"
+            placeholder="Адрес получателя"
+          />
+          <input
+            type="text"
+            class="input-transactionSum"
+            placeholder="Сумма транзакции (в eth)"
+          />
+          <div class="safety-div">
+            <input type="checkbox" class="input-checkbox-safetyTransact" />
+            <p>Safety Transaction</p>
+          </div>
+          <input
+            type="text"
+            class="input-codeWord"
+            placeholder="Кодовое слово"
+          />
+          <input
+            type="text"
+            class="input-desc"
+            placeholder="Описание транзакции"
+          />
+          <button class="btn-sendTransactions btn-usual">Отправить</button>
+        </div>
+
+        <img
+          src="./src/png/cross.png"
+          alt=""
+          class="img-modal-addTransaction-cross"
+        />
+      </div>
+    </div>
+
+<!-- Модальное окно со всеми транзакциями -->
+<div class="layer-modal-allTransactions" style="visibility: hidden;">
+  <div class="modal-allTransactions">
+
+<table class="transactions">
+  <thead>
+    <th colspan="5">
+      <tr>
+        <td>ID</td>
+        <td>Отправитель/получатель</td>
+        <td>Сумма транзакции</td>
+        <td>Активность транзакции</td>
+      </tr>
+
+    </th>
+
+  </thead>
+  <tbody class="table-body-allTransactions">
+
+  </tbody>
+</table>
+  <img
+    src="./src/png/cross.png"
+    alt=""
+    class="img-modal-allTransaction-cross"
+  />
+  </div>
 </div>
+
+<div class="layer-modal-recieveTransaction" style="visibility: hidden;">
+  <div class="modal-recieveTransaction">
+
+    <div class="transaction-field">
+      <!-- <h2>Транзакция №1</h2>
+      <p class="field-receiver">receiver</p>
+      <p class="field-sender">sender</p>
+      <p class="field-sum">1 eth</p>
+      <p class="field-active-status">true</p>
+      <p class="field-sended">false</p>
+      <p class="field-qtyAttempts">3</p>
+      <p class="field-safety-status">false</p>
+      <p class="field-confirmedByAdmin-status">false</p>
+      <p class="field-desc">description</p> -->
+      <input type="text" class="input-recieve-codeWord" placeholder="Введите кодовое слово">
+    </div>
+    
+    <button class="btn-receive-transaction btn-usual">Принять транзакцию</button>
+
 
 
     
+    
 
-</body>
+    <img
+    src="./src/png/cross.png"
+    alt=""
+    class="img-modal-receiveTransaction-cross"
+  />
+  </div>
+</div>
+
+
+
+  </body>
 </html>
