@@ -29,22 +29,31 @@ export function fillUserTransactions(arrTransacts,curUser,web3){
                 
         `
         if (el.receiverAddress == curUser) {
-          let td = document.createElement("td");
-          td.innerHTML = `
-                <button class="tr-btn-accept btn-usual">
-                    Принять платеж
-                </button>
-             `;
-             tr.append(td)
+            if(el.activeTransaction){
+                let td = document.createElement("td");
+                td.innerHTML = `
+                        <button class="tr-btn-accept btn-usual">
+                            Принять платеж
+                        </button>
+                    `;
+                    tr.append(td)
 
-             td.querySelector('button').onclick = ()=>{
-                fillReceiveTransaction(arrTransacts)
-                showReceiveTransaction();
-            };
+                    td.querySelector('button').onclick = ()=>{
+                        fillReceiveTransaction(arrTransacts)
+                        showReceiveTransaction();
+                    };
+            }else{
+                let td = document.createElement("td");
+                tr.append(td);
+
+            }
+         
 
           tr.style.backgroundColor = "#cef5d6";
         } else if (el.senderAddress == curUser) {
-          tr.style.backgroundColor = "#f4f5ce";
+            tr.style.backgroundColor = "#f4f5ce";
+            let td = document.createElement("td");
+            tr.append(td);
         }
         //  if (el.receiverAddress == curUser) {
         //    let td = document.createElement("td");
@@ -57,7 +66,7 @@ export function fillUserTransactions(arrTransacts,curUser,web3){
         //         </button>
         //     `;
         //  }
-        if(el.receiverAddress == curUser || el.senderAddress == curUser){
+        if((el.receiverAddress == curUser || el.senderAddress == curUser) ){
             vars.tableBodyUserTransactions.append(tr);
         }
 

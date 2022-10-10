@@ -11,11 +11,12 @@ import {
 } from "./src/hideShowElements.js"; // импорт функций для отображения/скрытия окна авторизации, входа в аккаунт(отдельно) и регистрации(отдельно)
 import * as vars from "./src/variables.js"; // импорт констант с querySelector
 import { createAdminPanel } from "./src/createAdminPanel.js";
-import {fillAllTransactions} from "./src/fillAllTransactions.js"
-import {fillUserTransactions} from "./src/fillUserTransactions.js"
+import { fillAllTransactions } from "./src/fillAllTransactions.js";
+import { fillUserTransactions } from "./src/fillUserTransactions.js";
+import {fillSelectAddresses} from "./src/fillSelectAddresses.js"
 console.log("hi");
 
-let contractAddress = "0xB6Ed42Ab5Ba7E82FB36bb60B2003A0e29C4dd413";
+let contractAddress = "0xCc9322Ab0DD71857F69ba7De716e52e3448e0B0C";
 
 // const abi = [
 //   {
@@ -386,492 +387,474 @@ let contractAddress = "0xB6Ed42Ab5Ba7E82FB36bb60B2003A0e29C4dd413";
 //   },
 // ];
 const abi = [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "changingUserAddress",
-				"type": "address"
-			}
-		],
-		"name": "changeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "idTransaction",
-				"type": "uint256"
-			}
-		],
-		"name": "confirmTransaction",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiverAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "transactionSum",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "codeWord",
-				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "safetyTransactionStatus",
-				"type": "bool"
-			},
-			{
-				"internalType": "string",
-				"name": "transationDescription",
-				"type": "string"
-			}
-		],
-		"name": "createTransaction",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "idTransaction",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "enteredCodeWord",
-				"type": "string"
-			}
-		],
-		"name": "receiveTransaction",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "adr",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "password",
-				"type": "string"
-			}
-		],
-		"name": "registration",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "returnMsgValue",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "voted",
-				"type": "address"
-			}
-		],
-		"name": "startPromotionVoting",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "idPromotion",
-				"type": "uint256"
-			}
-		],
-		"name": "toVote",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"stateMutability": "payable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "categories",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getBalance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "adr",
-				"type": "address"
-			}
-		],
-		"name": "getContractBalance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getPromotionArr",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "promoted",
-						"type": "address"
-					},
-					{
-						"internalType": "address[]",
-						"name": "votes",
-						"type": "address[]"
-					},
-					{
-						"internalType": "bool",
-						"name": "active",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct transactions.Promotion[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getTransactionsHistoryArr",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "receiverAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "senderAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "transactionSum",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "activeTransaction",
-						"type": "bool"
-					},
-					{
-						"internalType": "bool",
-						"name": "moneyWasSended",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "codeWord",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "attemptsQty",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "confirmedByWord",
-						"type": "bool"
-					},
-					{
-						"internalType": "bool",
-						"name": "safetyTransactionStatus",
-						"type": "bool"
-					},
-					{
-						"internalType": "bool",
-						"name": "confirmedByAdmin",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "transationDescription",
-						"type": "string"
-					}
-				],
-				"internalType": "struct transactions.Transaction[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "userAdr",
-				"type": "address"
-			}
-		],
-		"name": "getUser",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "password",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "role",
-						"type": "string"
-					}
-				],
-				"internalType": "struct transactions.User",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "patterns",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "patternName",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "promotions",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "promoted",
-				"type": "address"
-			},
-			{
-				"internalType": "bool",
-				"name": "active",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "qtyAdmins",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "transactionsHistory",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "receiverAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "senderAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "transactionSum",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "activeTransaction",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "moneyWasSended",
-				"type": "bool"
-			},
-			{
-				"internalType": "string",
-				"name": "codeWord",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "attemptsQty",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "confirmedByWord",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "safetyTransactionStatus",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "confirmedByAdmin",
-				"type": "bool"
-			},
-			{
-				"internalType": "string",
-				"name": "transationDescription",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "users",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "password",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "role",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-]
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "changingUserAddress",
+        type: "address",
+      },
+    ],
+    name: "changeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "idTransaction",
+        type: "uint256",
+      },
+    ],
+    name: "confirmTransaction",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "receiverAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "transactionSum",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "codeWord",
+        type: "string",
+      },
+      {
+        internalType: "bool",
+        name: "safetyTransactionStatus",
+        type: "bool",
+      },
+      {
+        internalType: "string",
+        name: "transationDescription",
+        type: "string",
+      },
+    ],
+    name: "createTransaction",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "idTransaction",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "enteredCodeWord",
+        type: "string",
+      },
+    ],
+    name: "receiveTransaction",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "returnMsgValue",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "voted",
+        type: "address",
+      },
+    ],
+    name: "startPromotionVoting",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "idPromotion",
+        type: "uint256",
+      },
+    ],
+    name: "toVote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    stateMutability: "payable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "categories",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBalance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "adr",
+        type: "address",
+      },
+    ],
+    name: "getContractBalance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getPromotionArr",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "promoted",
+            type: "address",
+          },
+          {
+            internalType: "address[]",
+            name: "votes",
+            type: "address[]",
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool",
+          },
+        ],
+        internalType: "struct transactions.Promotion[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTransactionsHistoryArr",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "receiverAddress",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "senderAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "transactionSum",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "activeTransaction",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "moneyWasSended",
+            type: "bool",
+          },
+          {
+            internalType: "string",
+            name: "codeWord",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "attemptsQty",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "confirmedByWord",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "safetyTransactionStatus",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "confirmedByAdmin",
+            type: "bool",
+          },
+          {
+            internalType: "string",
+            name: "transationDescription",
+            type: "string",
+          },
+        ],
+        internalType: "struct transactions.Transaction[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "userAdr",
+        type: "address",
+      },
+    ],
+    name: "getUser",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "password",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "role",
+            type: "string",
+          },
+        ],
+        internalType: "struct transactions.User",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "patterns",
+    outputs: [
+      {
+        internalType: "string",
+        name: "patternName",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "promotions",
+    outputs: [
+      {
+        internalType: "address",
+        name: "promoted",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "active",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "qtyAdmins",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "transactionsHistory",
+    outputs: [
+      {
+        internalType: "address",
+        name: "receiverAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "senderAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "transactionSum",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "activeTransaction",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "moneyWasSended",
+        type: "bool",
+      },
+      {
+        internalType: "string",
+        name: "codeWord",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "attemptsQty",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "confirmedByWord",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "safetyTransactionStatus",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "confirmedByAdmin",
+        type: "bool",
+      },
+      {
+        internalType: "string",
+        name: "transationDescription",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "users",
+    outputs: [
+      {
+        internalType: "string",
+        name: "password",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "role",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+];
 
 let web3, contractInstance, curUser;
 
 function network() {
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   console.log(web3);
   console.log("u connected to blockchain");
   contractInstance = new web3.eth.Contract(abi, contractAddress);
@@ -880,15 +863,14 @@ function network() {
 
 async function getAccounts() {
   let result = await web3.eth.getAccounts();
-  console.log(result);
+//   console.log(result);
+  return result;
 }
 
 //вход в аккаунт (отображение страницы с функциями пользователя и администратора )
 function enterAccount(user, adr, balance) {
-  
   console.log("enter");
   hideAuthorization(); //скрытие окна авторизации
-  
 
   localStorage.setItem("currentUser", adr); // запись адреса текущего пользователя в localStorage
 
@@ -897,24 +879,55 @@ function enterAccount(user, adr, balance) {
   vars.userBalance.textContent = `Ваш баланс ${balance} eth`;
   console.log("func");
 }
-function getAllTransacts(){
-  return(contractInstance.methods
+function getAllTransacts() {
+  return contractInstance.methods
     .getTransactionsHistoryArr()
     .call({ from: curUser })
-    .then((val)=>{return val})
-  ) }
-    // console.log(allTransactions)
-    // return await allTransactions;
-  
-  
-  // return (await allTransactions)
+    .then((val) => {
+      return val;
+    });
+}
+
+function receiveTransactionEvent() {
+  let h2Text = event.target.closest("div").querySelector("h2").textContent;
+  let gottenId = parseInt(h2Text.match(/\d+/));
+
+  let h2Sum = event.target.closest("div").querySelector(".field-sum").textContent;
+  let gottenSum = parseInt(h2Sum.split(":")[1]);
+
+  console.log(gottenSum);
+
+  // console.log(event.target.closest('div').querySelector('h2').textContent)
+  console.log(parseInt(h2Text.match(/\d+/)));
+
+  let insertedCodeWord = vars.inputRecieveCodeWord();
+
+  console.log(insertedCodeWord.value);
+
+  //   console.log(vars.inputRecieveCodeWord.value);
 
 
+contractInstance.methods.receiveTransaction(gottenId,insertedCodeWord.value ).send({
+	from: curUser,
+//   value: gottenSum,
+	gas: 3000000
+})
+	.then(()=>{
+		location.reload();
+	})
+}
+
+
+
+
+// console.log(allTransactions)
+// return await allTransactions;
+
+// return (await allTransactions)
 
 // console.log(localStorage.getItem('currentUser') != null)
 network();
 getAccounts();
-
 
 //функция для стартовой отрисовки страницы в зависимости от нахождения в localStorage данных о текущем пользователе
 //если функция не находит в localStorage адреса пользователя, то отрисовывает окно авторизации
@@ -936,15 +949,17 @@ getAccounts();
   } catch {
     console.log("catch");
     showAuthorization();
+	getAccounts().then((arr) => {
+		fillSelectAddresses(vars.selectAuth,arr, contractInstance);
+  });
+	// fillSelectAddresses(vars.selectAuth, )
   }
 })();
 
-getAllTransacts()
-  .then((arr)=>{
-    fillAllTransactions(arr,curUser,web3)
-    fillUserTransactions(arr,curUser,web3)
-
-  })
+getAllTransacts().then((arr) => {
+  fillAllTransactions(arr, curUser, web3);
+  fillUserTransactions(arr, curUser, web3);
+});
 
 vars.authForm.addEventListener("submit", async () => {
   //слушатель событий на форму авторизации
@@ -955,65 +970,81 @@ vars.authForm.addEventListener("submit", async () => {
   userBalance = web3.utils.fromWei(userBalance);
 
   let responseAccount = await contractInstance.methods
-        .getUser(login)
-        .call({ from: "0x455cfFeA5e0C022C2864d4005aFfB3edA74c3f70" });
-    console.log(responseAccount);
-    if (responseAccount.password == password) {
-        //проверка валидности логина и пароля в соответствии с маппингом контракта
-        console.log("successful enter");
-        console.log();
-        location.reload()
-        enterAccount(responseAccount, login,userBalance);
-
-
-
-    } else {
-        console.log("wrong password or/and login");
-    }
+    .getUser(login)
+    .call({ from: "0x455cfFeA5e0C022C2864d4005aFfB3edA74c3f70" });
+  console.log(responseAccount);
+  if (responseAccount.password == password) {
+    //проверка валидности логина и пароля в соответствии с маппингом контракта
+    console.log("successful enter");
+    console.log();
+    location.reload();
+    enterAccount(responseAccount, login, userBalance);
+  } else {
+    console.log("wrong password or/and login");
+  }
 });
 
-vars.authRegBtn.addEventListener("click",showRegistration)
-  // событие на кнопку Регистрации на странице Авторизации
-  
-vars.regEnterBtn.addEventListener("click",showLogining)
-  // событие на кнопку Войти на странице Авторизации
+vars.authRegBtn.addEventListener("click", showRegistration);
+// событие на кнопку Регистрации на странице Авторизации
 
-vars.btnExit.addEventListener("click",()=>{
+vars.regEnterBtn.addEventListener("click", showLogining);
+// событие на кнопку Войти на странице Авторизации
+
+vars.btnExit.addEventListener("click", () => {
   showAuthorization();
   vars.tableBodyUserTransactions.innerHTML = "";
-}
-)
-  // событие на кнопку Выход на странице аккаунта пользователя
+});
+// событие на кнопку Выход на странице аккаунта пользователя
 
 vars.btnShowAllTranasctions.addEventListener("click", async () => {
   console.log("__________");
   // console.log(  getAllTransacts().then((val)=>{return val})  );
-  getAllTransacts()
-  .then((arr)=>{fillAllTransactions(arr,curUser,web3)})
+  getAllTransacts().then((arr) => {
+    fillAllTransactions(arr, curUser, web3);
+  });
   showAllTransactions();
   console.log("__________");
 });
 
-vars.imgAddTransactCross.addEventListener("click",hideCreateTransact);
+vars.imgAddTransactCross.addEventListener("click", hideCreateTransact);
 
-vars.btnAddTransact.addEventListener("click", showCreateTransact)
+vars.btnAddTransact.addEventListener("click", showCreateTransact);
 
-vars.btnSendTransactions.addEventListener("click", async()=>{
-  await contractInstance.methods.createTransaction(
-    vars.inputRecieverAddress.value,
-    web3.utils.toWei(vars.inputTransactionSum.value, 'ether'),
-    vars.inputCodeWord.value,
-    vars.inputCheckboxSafetyTransact.checked,
-    vars.inputDesc.value)
-  .send({from: curUser, value:web3.utils.toWei(vars.inputTransactionSum.value, 'ether'), gas:3000000})
-console.log('clicked send')
+vars.btnSendTransactions.addEventListener("click", async () => {
+  hideCreateTransact();
+  await contractInstance.methods
+    .createTransaction(
+      vars.inputRecieverAddress.value,
+      web3.utils.toWei(vars.inputTransactionSum.value, "ether"),
+      vars.inputCodeWord.value,
+      vars.inputCheckboxSafetyTransact.checked,
+      vars.inputDesc.value
+    )
+    .send({
+      from: curUser,
+      value: web3.utils.toWei(vars.inputTransactionSum.value, "ether"),
+      gas: 3000000,
+    });
+  console.log("clicked send");
+  location.reload();
+});
 
+vars.imgAllTransactCross.addEventListener("click", hideAllTransactions);
+vars.imgModalReceiveTransactionCross.addEventListener(
+  "click",
+  hideReceiveTransaction
+);
+
+vars.btnReceiveTransaction.addEventListener("click", ()=>{
+	receiveTransactionEvent();
+	// location.reload();
+
+});
+
+vars.selectAuth.addEventListener('change', ()=>{
+	console.log(vars.selectAuth.value)
+	vars.authLoginInput.value = vars.selectAuth.value;
 })
-
-vars.imgAllTransactCross.addEventListener('click', hideAllTransactions)
-vars.imgModalReceiveTransactionCross.addEventListener('click', hideReceiveTransaction)
-
-
 /**
  * @type {HTMDivLElement}
  */

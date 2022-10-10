@@ -348,6 +348,8 @@ td{
     margin-top: 50px;
     padding: 50px;
     position: relative;
+
+    overflow: auto;
 }
 .modal-allTransactions .transact-item{
     width: 600px;

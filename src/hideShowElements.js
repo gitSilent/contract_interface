@@ -1,4 +1,5 @@
 import * as vars from './variables.js'
+import { fillSelectAddresses } from "./fillSelectAddresses.js";
 
 export function hideAuthorization(){
 	vars.authLayer.style.visibility = 'hidden'
@@ -12,7 +13,7 @@ export function hideAuthorization(){
 }
 export function showAuthorization(){
 	localStorage.removeItem('currentUser')
-
+	// fillSelectAddresses(arr);
 	vars.authLayer.style.visibility = 'visible'
 	vars.regLayer.style.visibility = 'hidden'
 
