@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles.css" />
     <script type="module" src="./src/variables.js"></script>
     <script type="module" src="./src/fillAllTransactions.js"></script>
+    <script type="module" src="./src/cancelTransactionEvent.js"></script>
     <script type="module" src="./src/fillSelectAddresses.js"></script>
     <script type="module" src="./src/fillReceiveTransaction.js"></script>
     <script type="module" src="./src/createAdminPanel.js"></script>
@@ -26,7 +27,9 @@
     <div class="auth" style="visibility: hidden">
       <form class="auth-cont">
         <h2 class="h2-auth">Авторизация</h2>
-        <select name="" id="" class="select-auth"></select>
+        <select name="" id="" class="select-auth" >
+          <option value=""></option>
+        </select>
         <input
           type="text"
           class="auth-login-input"
@@ -88,11 +91,13 @@
             
           </tbody>
         </table>
-        <button class="btn-showAllTransactions btn-usual">
-          Показать все транзакции
-        </button>
+        
       </div>
-    
+
+      <button class="btn-showAllTransactions btn-usual">
+        Показать все транзакции
+      </button>
+
       <button class="btn-exit btn-usual">Выход</button>
     </div>
 

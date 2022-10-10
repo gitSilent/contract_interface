@@ -77,3 +77,7 @@ export const inputRecieveCodeWord = () => {
   return document.querySelector(".input-recieve-codeWord");
 };
 export const selectAuth = document.querySelector('.select-auth');
+
+export const btnCancelTransaction = ()=>{
+  return document.querySelector(".tr-btn-cancel")
+}

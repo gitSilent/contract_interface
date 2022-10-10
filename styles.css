@@ -197,13 +197,15 @@ h2{
 
 .user-account{
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .user-account p {
     text-align: center;
     margin: 5px;
 }
 .add-transact{
-    margin: 0 auto;
+    margin-left: 10px;
     width: max-content;
 }
 
@@ -213,6 +215,10 @@ h2{
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+
+    overflow: auto;
+    max-height: 500px !important;
+    
 }
 .btn-exit{
     position: absolute;
@@ -266,6 +272,7 @@ td{
     padding-left: 10px;
     padding-right: 10px;
 }
+
 
 /* _______________________________________________ */
 /* Модальное окно добавления транзакции */
@@ -405,4 +412,12 @@ td{
 }
 .btn-receive-transaction{
     margin-top: 10px;
+}
+
+/* Отмена транзакции */
+.btn-cancel{
+    background-color: rgb(202, 80, 80);
+}
+.btn-cancel:hover{
+    background-color: rgb(212, 52, 52);
 }

@@ -1,8 +1,10 @@
 import * as vars from "./variables.js"
 import { fillReceiveTransaction } from "./fillReceiveTransaction.js";
 import { showReceiveTransaction } from "./hideShowElements.js";
+import {cancelTransactionEvent} from "./cancelTransactionEvent.js"
 
-export function fillUserTransactions(arrTransacts,curUser,web3){
+
+export function fillUserTransactions(arrTransacts,curUser,web3,contractInstance){
     vars.tableBodyUserTransactions.innerHTML = "";
     console.log(arrTransacts)
     arrTransacts.forEach((el,index) => {
@@ -42,18 +44,43 @@ export function fillUserTransactions(arrTransacts,curUser,web3){
                         fillReceiveTransaction(arrTransacts)
                         showReceiveTransaction();
                     };
-            }else{
+                tr.style.backgroundColor = "#cef5d6";
+
+            }
+            
+            else if(!el.activeTransaction && el.moneyWasSended == false){
                 let td = document.createElement("td");
                 tr.append(td);
+                tr.style.backgroundColor = "#edc2c2";
+
+
+            } else {
+                let td = document.createElement("td");
+                tr.append(td);
+                tr.style.backgroundColor = "#cef5d6";
 
             }
          
 
-          tr.style.backgroundColor = "#cef5d6";
-        } else if (el.senderAddress == curUser) {
+        } else if (el.senderAddress == curUser && el.activeTransaction == true) {
             tr.style.backgroundColor = "#f4f5ce";
             let td = document.createElement("td");
+                td.innerHTML = `
+                        <button class="tr-btn-cancel btn-usual btn-cancel">
+                            Отменить платеж
+                        </button>
+                    `;
+                    tr.append(td)
+
+                    td.querySelector('button').onclick = ()=>{
+                        cancelTransactionEvent(web3,contractInstance,curUser)
+                    };
+        }
+        else{
+            tr.style.backgroundColor = "#edc2c2";
+            let td = document.createElement("td");
             tr.append(td);
+
         }
         //  if (el.receiverAddress == curUser) {
         //    let td = document.createElement("td");

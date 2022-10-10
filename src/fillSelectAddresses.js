@@ -1,8 +1,13 @@
 // import { fillSelectAddresses } from "./fillSelectAddresses.js";
 
 export function fillSelectAddresses(select, arr, contractInstance) {
+  select.innerHTML = '';
+  let option = document.createElement("option");
+  option.setAttribute('disabled', 'disabled');
+  option.setAttribute('selected', 'selected');
   console.log(arr);
-
+  
+  select.append(option)
   arr.forEach((el, index) => {
     let option = document.createElement("option");
     option.label = el;
