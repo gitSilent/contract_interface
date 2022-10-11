@@ -37,13 +37,16 @@ contract transactions{
         string category_name;
         Pattern[] patterns;
     }
-        Pattern[] public patterns;
+        // Pattern[] public patterns;
 
+    Category[] public cats;
+    
     // uint balance;
-    // mapping(string => mapping(string => uint[])) public categories;
+    mapping(string => mapping(string => uint[])) public categories;
 
-    Category[] public categories;
-    // string[][] public categories_names;
+    // Category[] public categories;
+    string[] public categories_names;
+    string[][] public patterns_names;
 
     struct Promotion{
         address promoted;
@@ -55,32 +58,44 @@ contract transactions{
     uint public qtyAdmins;
 
     constructor() payable{
-        users[0x567b9a9F4B73915325a2bd9D3d9FF73d237e1306] = User("1234","admin");
-        users[0x2A446d3Fe68691AfBdC601255444616FCF114E5E] = User("1234","admin");
+        users[0x97D4c679b6a76A922695e2779873e93A5A6758ca] = User("1234","admin");
+        users[0x47EdB923064A6f527e3cc0FBaD1F85DF965109f6] = User("1234","admin");
 
-        users[0xba0f86C124dBb5A5320081F45c4e80fA88DAFfF7] = User("1234","user");
-        users[0xF0E37460f3458d3a7ec16FFeE8D1A3334EAB1Eb1] = User("1234","user");
-        users[0x5369eD6c1fE069E3e0a40cC92611E4757223B161] = User("1234","user");
+        users[0xF8aF4d1106BD906B30C466032d5DDd2DDDbF4B60] = User("1234","user");
+        users[0x83bAFAa547b3910c2f7F4e1339d9B4226E77618c] = User("1234","user");
+        users[0xb4ef836c1bbeF6683FFa485240361B2A9cb2a211] = User("1234","user");
 
         qtyAdmins = 2;
         
         // balance = msg.value;
         // uint[] arr = [10,30,50];
-        uint8[] memory arr = new uint[](3);
+        // uint8[] memory arr = new uint[](3);
+        // Pattern memory pat = Pattern("present",[10,30,50]);
+        // cats.push(Category("private_transfer",[pat]));
+
         // Pattern memory pat = Pattern("present",arr);
         // categories.push(Category("private_transfer",patterns.push(Pattern("present",[10,30,50]))));
-        // categories["private_transfer"]["present"] = [10,30,50];
+        categories["Private Transfer"]["present"] = [10,30,50];
         // categories_names.push(["private_transfer"]);
         // categories_names[0][0] = ("present");
 
     
-        // categories["rent_payment"]["apartment_payment"] = [70,90];
+        categories["Rent Payment"]["apartment_payment"] = [70,90];
         // categories_names[1].push("rent_payment");
         // categories_names[1][0] = ("apartment_payment");
 
-        // categories["private_settlement"]["debt_payment"] = [10];
+        categories["Private Settlement"]["debt_payment"] = [10];
         // categories_names[2].push("private_settlement");
         // categories_names[2][0] = ("debt_payment");
+
+        categories_names.push("Private Transfer");
+        categories_names.push("Rent Payment");
+        categories_names.push("Private Settlement");
+
+        patterns_names.push(["present"]);
+        patterns_names.push(["apartment_payment"]);
+        patterns_names.push(["debt_payment"]);
+
 
         
     }
@@ -208,6 +223,15 @@ contract transactions{
 
     function returnMsgValue() public payable returns(uint){
         return(msg.value);
+    }
+    function getPatternArray(string memory category, string memory pattern) public view returns(uint[] memory){
+        return(categories[category][pattern]);
+            }
+    function getCatNames() public view returns (string[] memory){
+        return categories_names;
+    } 
+    function getPatNames() public view returns (string[][] memory){
+        return patterns_names;
     }
     // function getTransactionHistory() public view returns(Transaction[] memory){
     //     return(transactionsHistory);

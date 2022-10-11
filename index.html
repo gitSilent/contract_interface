@@ -11,6 +11,7 @@
     <script type="module" src="./src/cancelTransactionEvent.js"></script>
     <script type="module" src="./src/fillSelectAddresses.js"></script>
     <script type="module" src="./src/fillReceiveTransaction.js"></script>
+    <script type="module" src="./src/fillSelectCategories.js"></script>
     <script type="module" src="./src/createAdminPanel.js"></script>
     <script type="module" src="./src/hideShowElements.js"></script>
     <script src="./web3_min.js" defer></script>
@@ -106,19 +107,34 @@
       <div class="modal-addTransaction">
         <h3>Создание транзакции</h3>
         <div class="added-info">
-          <select name="" id="" class="select-createTransaction" >
-          <option value=""></option>
-        </select>
-          <input
-            type="text"
-            class="input-recieverAddress"
-            placeholder="Адрес получателя"
-          />
-          <input
-            type="text"
-            class="input-transactionSum"
-            placeholder="Сумма транзакции (в eth)"
-          />
+          <div class="div-insertUser">
+            <select name="" id="" class="select-createTransaction select-addTransact" >
+            </select>
+              <input
+                type="text"
+                class="input-recieverAddress"
+                placeholder="Адрес получателя"
+              />
+          </div>
+          
+          <div class="div-insertSum">
+            <select name="" id="" class="select-category select-addTransact">
+              <option value="" disabled="disabled" selected="true">Выберите категорию</option>
+            </select>
+            <select name="" id="" class="select-pattern select-addTransact">
+              <option value="" disabled="disabled" selected="true">Выберите шаблон</option>
+            </select>
+            <select name="" id="" class="select-sum select-addTransact">
+              <option value="" disabled="disabled" selected="true">Выберите сумму</option>
+            </select>
+            <input
+              type="text"
+              class="input-transactionSum"
+              placeholder="Сумма транзакции (в eth)"
+            />
+          </div>
+         
+          
           <div class="safety-div">
             <input type="checkbox" class="input-checkbox-safetyTransact" />
             <p>Safety Transaction</p>

@@ -5,6 +5,7 @@ export function fillSelectAddresses(select, arr, contractInstance) {
   let option = document.createElement("option");
   option.setAttribute('disabled', 'disabled');
   option.setAttribute('selected', 'selected');
+  option.label = "Выберите пользователя"
   console.log(arr);
   
   select.append(option)
@@ -24,6 +25,6 @@ export function fillSelectAddresses(select, arr, contractInstance) {
         }
     })
   });
-
+  select.prepend
   console.log("filled");
 }

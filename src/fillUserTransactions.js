@@ -41,7 +41,7 @@ export function fillUserTransactions(arrTransacts,curUser,web3,contractInstance)
                     tr.append(td)
 
                     td.querySelector('button').onclick = ()=>{
-                        fillReceiveTransaction(arrTransacts)
+                        fillReceiveTransaction(arrTransacts,web3)
                         showReceiveTransaction();
                     };
                 tr.style.backgroundColor = "#cef5d6";

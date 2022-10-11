@@ -16,6 +16,10 @@ body {
     overflow-y: hidden;
 
 }
+.user-address, .user-role, .user-balance{
+    margin-top: 10px;
+    margin-left: 10px;
+}
 
 .btn-usual {
 	background-color:#6258e8;
@@ -222,7 +226,7 @@ h2{
 }
 .btn-exit{
     position: absolute;
-    top: 0;
+    top: 10px;
     right: 10px;
 }
 .btn-exit:hover{
@@ -287,13 +291,20 @@ td{
 }
 .modal-addTransaction{
     border:0;
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     background-color: rgb(238, 238, 238);
     border-radius: 10px;
+
+    position: relative;
+
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+
 }
 .modal-addTransaction h3{
     margin: 0 auto;
@@ -303,15 +314,12 @@ td{
 
 .added-info{
     margin-top: 10px !important;
-    width: 300px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
 }
-.modal-addTransaction{
-    padding-top: 50px;
-    position: relative;
-}
+
 .modal-addTransaction input{
     margin-bottom: 10px;
 }
@@ -337,6 +345,31 @@ td{
 .img-modal-addTransaction-cross:hover{
     cursor: pointer;
 }
+.select-addTransact{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.199);
+    border-radius: 10px;
+    font-family: 'Quicksand', sans-serif;
+
+}
+.div-insertUser{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.26);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.div-insertSum{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.26);
+    border-radius: 10px;
+    padding: 10px;
+}
+
 
 /* Модальное окно с отображением всех транзакций */
 .layer-modal-allTransactions{
@@ -421,3 +454,4 @@ td{
 .btn-cancel:hover{
     background-color: rgb(212, 52, 52);
 }
+
