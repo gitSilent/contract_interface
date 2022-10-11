@@ -81,3 +81,6 @@ export const selectAuth = document.querySelector('.select-auth');
 export const btnCancelTransaction = ()=>{
   return document.querySelector(".tr-btn-cancel")
 }
+export const selectCreateTransaction = document.querySelector(
+  ".select-createTransaction"
+);
