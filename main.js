@@ -8,25 +8,26 @@ import {
   hideAllTransactions,
   showAllTransactions,
   hideReceiveTransaction,
+  showAdminPanel,
+  hideAdminPanel
 } from "./src/hideShowElements.js"; // импорт функций для отображения/скрытия окна авторизации, входа в аккаунт(отдельно) и регистрации(отдельно)
 import * as vars from "./src/variables.js"; // импорт констант с querySelector
 import { createAdminPanel } from "./src/createAdminPanel.js";
 import { fillAllTransactions } from "./src/fillAllTransactions.js";
 import { fillUserTransactions } from "./src/fillUserTransactions.js";
-import {fillSelectAddresses} from "./src/fillSelectAddresses.js"
-import {cancelTransactionEvent} from "./src/cancelTransactionEvent.js"
-import {fillSelectCategories} from './src/fillSelectCategories.js'
-import {createEmptyOption} from './src/createEmptyOption.js'
+import { fillSelectAddresses } from "./src/fillSelectAddresses.js";
+import { cancelTransactionEvent } from "./src/cancelTransactionEvent.js";
+import { fillSelectCategories } from "./src/fillSelectCategories.js";
+import { createEmptyOption } from "./src/createEmptyOption.js";
 console.log("hi");
 
-let contractAddress = "0x8dc18Ad448b07A03493953c1a3113DAf3e1f49E6";
-
+let contractAddress = "0x413E10df04401348639B4bD4B7fEa48D2bd0D5A8";
 
 let web3, contractInstance, curUser;
 let catNames, patternNames;
 
 function network() {
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   console.log(web3);
   console.log("u connected to blockchain");
   contractInstance = new web3.eth.Contract(vars.abi, contractAddress);
@@ -63,7 +64,9 @@ function receiveTransactionEvent() {
   let h2Text = event.target.closest("div").querySelector("h2").textContent;
   let gottenId = parseInt(h2Text.match(/\d+/));
 
-  let h2Sum = event.target.closest("div").querySelector(".field-sum").textContent;
+  let h2Sum = event.target
+    .closest("div")
+    .querySelector(".field-sum").textContent;
   let gottenSum = parseInt(h2Sum.split(":")[1]);
 
   console.log(gottenSum);
@@ -74,20 +77,20 @@ function receiveTransactionEvent() {
 
   console.log(insertedCodeWord.value);
 
-
-contractInstance.methods.receiveTransaction(gottenId,insertedCodeWord.value ).send({
-	from: curUser,
-	gas: 3000000
-})
-	.then(()=>{
-		location.reload();
-	})
+  contractInstance.methods
+    .receiveTransaction(gottenId, insertedCodeWord.value)
+    .send({
+      from: curUser,
+      gas: 3000000,
+    })
+    .then(() => {
+      location.reload();
+    });
 }
-
-
 
 network();
 getAccounts();
+
 
 //функция для стартовой отрисовки страницы в зависимости от нахождения в localStorage данных о текущем пользователе
 //если функция не находит в localStorage адреса пользователя, то отрисовывает окно авторизации
@@ -103,27 +106,31 @@ getAccounts();
       .call({ from: curUser });
 
     enterAccount(user, localStorage.getItem("currentUser"), userBalance);
-
-    catNames = await contractInstance.methods.getCatNames().call()
-    patternNames = await contractInstance.methods.getPatNames().call()
-    fillSelectCategories(catNames,patternNames);
-
+    if (user.role == "admin") {
+      showAdminPanel();
+    } else{
+      hideAdminPanel();
+    }
+    
+    catNames = await contractInstance.methods.getCatNames().call();
+    patternNames = await contractInstance.methods.getPatNames().call();
+    fillSelectCategories(catNames, patternNames);
 
     console.log("async");
     console.log(user);
-  } catch {
+  } catch(er) {
+    console.log(er)
     console.log("catch");
     showAuthorization();
     getAccounts().then((arr) => {
-      fillSelectAddresses(vars.selectAuth,arr, contractInstance);
+      fillSelectAddresses(vars.selectAuth, arr, contractInstance);
     });
   }
-
 })();
 
 getAllTransacts().then((arr) => {
   fillAllTransactions(arr, curUser, web3);
-  fillUserTransactions(arr, curUser, web3,contractInstance);
+  fillUserTransactions(arr, curUser, web3, contractInstance);
 });
 
 vars.authForm.addEventListener("submit", async () => {
@@ -152,7 +159,7 @@ vars.authForm.addEventListener("submit", async () => {
 vars.authRegBtn.addEventListener("click", showRegistration);
 // событие на кнопку Регистрации на странице Авторизации
 
-vars.regEnterBtn.addEventListener("click", ()=>{
+vars.regEnterBtn.addEventListener("click", () => {
   showLogining();
 });
 // событие на кнопку Войти на странице Регистрации
@@ -160,7 +167,7 @@ vars.regEnterBtn.addEventListener("click", ()=>{
 vars.btnExit.addEventListener("click", () => {
   showAuthorization();
   getAccounts().then((arr) => {
-		fillSelectAddresses(vars.selectAuth,arr, contractInstance);
+    fillSelectAddresses(vars.selectAuth, arr, contractInstance);
   });
   vars.tableBodyUserTransactions.innerHTML = "";
 });
@@ -177,10 +184,10 @@ vars.btnShowAllTranasctions.addEventListener("click", async () => {
 
 vars.imgAddTransactCross.addEventListener("click", hideCreateTransact);
 
-vars.btnAddTransact.addEventListener("click", ()=>{
-	showCreateTransact();
-	getAccounts().then((arr) => {
-    	fillSelectAddresses(vars.selectCreateTransaction, arr, contractInstance);
+vars.btnAddTransact.addEventListener("click", () => {
+  showCreateTransact();
+  getAccounts().then((arr) => {
+    fillSelectAddresses(vars.selectCreateTransaction, arr, contractInstance);
   });
 });
 
@@ -209,73 +216,89 @@ vars.imgModalReceiveTransactionCross.addEventListener(
   hideReceiveTransaction
 );
 
-vars.btnReceiveTransaction.addEventListener("click", ()=>{
-	receiveTransactionEvent();
+vars.btnReceiveTransaction.addEventListener("click", () => {
+  receiveTransactionEvent();
 });
 
-vars.selectAuth.addEventListener('change', ()=>{
-	vars.authLoginInput.value = vars.selectAuth.value;
-})
+vars.selectAuth.addEventListener("change", () => {
+  vars.authLoginInput.value = vars.selectAuth.value;
+});
 
-vars.selectCreateTransaction.addEventListener('change', ()=>{
-	vars.inputRecieverAddress.value = vars.selectCreateTransaction.value;
-})
+vars.selectCreateTransaction.addEventListener("change", () => {
+  vars.inputRecieverAddress.value = vars.selectCreateTransaction.value;
+});
 
-vars.regRegBtn.addEventListener('click',()=>{
-  event.preventDefault()
+vars.regRegBtn.addEventListener("click", () => {
+  event.preventDefault();
   let insertedLogin = vars.regLoginInput.value;
-  let insertedPassword = vars.regPasswordInput.value
+  let insertedPassword = vars.regPasswordInput.value;
 
-  contractInstance.methods.registration(insertedLogin,insertedPassword ).send({from:insertedLogin})
-  .then((response)=>{
-    console.log(response);
-    alert('Вы зарегистрированы')
-    showAuthorization()
-    location.reload();
-  })
-})
+  contractInstance.methods
+    .registration(insertedLogin, insertedPassword)
+    .send({ from: insertedLogin })
+    .then((response) => {
+      console.log(response);
+      alert("Вы зарегистрированы");
+      showAuthorization();
+      location.reload();
+    });
+});
 
-vars.selectCategory.addEventListener('change', ()=>{
-  vars.selectPattern.innerHTML = ""
-  vars.selectPattern.append((()=>{
-    let option = createEmptyOption()
-    option.label = "Выберите шаблон"
-    return option
-  })())
+vars.selectCategory.addEventListener("change", () => {
+  vars.selectPattern.innerHTML = "";
+  vars.selectPattern.append(
+    (() => {
+      let option = createEmptyOption();
+      option.label = "Выберите шаблон";
+      return option;
+    })()
+  );
 
-  patternNames[event.target.value].forEach((val)=>{
-    let option = document.createElement('option');
+  patternNames[event.target.value].forEach((val) => {
+    let option = document.createElement("option");
     option.label = val;
 
     vars.selectPattern.append(option);
-    
-  })
-})
-vars.selectPattern.addEventListener('change', async ()=>{
- vars.selectSum.innerHTML = ""
+  });
+});
+vars.selectPattern.addEventListener("change", async () => {
+  vars.selectSum.innerHTML = "";
 
-  vars.selectSum.append((()=>{
-    let option = createEmptyOption()
-    option.label = "Выберите сумму"
-    return option
-  })())
+  vars.selectSum.append(
+    (() => {
+      let option = createEmptyOption();
+      option.label = "Выберите сумму";
+      return option;
+    })()
+  );
 
   let cat = vars.selectCategory;
   let pat = vars.selectPattern;
-  console.log(cat.options[cat.selectedIndex].label)
+  console.log(cat.options[cat.selectedIndex].label);
   let choosenCategory = cat.options[cat.selectedIndex].label;
-  let choosenPattern = pat.options[pat.selectedIndex].label
+  let choosenPattern = pat.options[pat.selectedIndex].label;
 
-  let sumArray = await contractInstance.methods.getPatternArray(choosenCategory, choosenPattern).call()
-  sumArray.forEach((val)=>{
-    let option = document.createElement('option');
+  let sumArray = await contractInstance.methods
+    .getPatternArray(choosenCategory, choosenPattern)
+    .call();
+  sumArray.forEach((val) => {
+    let option = document.createElement("option");
     option.label = val;
-    
-    vars.selectSum.append(option)
+
+    vars.selectSum.append(option);
+  });
+});
+vars.selectSum.addEventListener("change", () => {
+  vars.inputTransactionSum.value =
+    vars.selectSum.options[vars.selectSum.selectedIndex].label;
+});
+vars.btnConfirmTransact.addEventListener('click', ()=>{
+  let insertedId = vars.inputConfirmTransact.value;
+  // console.log(vars.inputConfirmTransact.value)
+  contractInstance.methods.confirmTransaction(insertedId).send({from:curUser})
+  .then((value)=>{
+    console.log(value)
   })
-})
-vars.selectSum.addEventListener('change',()=>{
-  vars.inputTransactionSum.value = vars.selectSum.options[vars.selectSum.selectedIndex].label;
 })
 /**
  * @type {HTMDivLElement}

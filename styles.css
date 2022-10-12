@@ -276,6 +276,14 @@ td{
     padding-left: 10px;
     padding-right: 10px;
 }
+.div-adminPanel{
+    margin-top: 30px;
+    margin-left: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.24);
+    border-radius: 10px;
+    width: fit-content;
+    padding: 10px;
+}
 
 
 /* _______________________________________________ */

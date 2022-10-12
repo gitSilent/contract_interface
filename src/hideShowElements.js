@@ -13,7 +13,7 @@ export function hideAuthorization(){
 }
 export function showAuthorization(){
 	localStorage.removeItem('currentUser')
-	
+	hideAdminPanel()
 	// fillSelectAddresses(arr);
 	vars.authLayer.style.visibility = 'visible'
 	vars.regLayer.style.visibility = 'hidden'
@@ -60,4 +60,12 @@ export function hideReceiveTransaction(){
 }
 export function showReceiveTransaction(){
 	vars.layerModalRecieveTransaction.style.visibility = 'visible'
+}
+export function hideAdminPanel(){
+	vars.divAdminPanel.style.visibility = 'hidden';
+	vars.divAdminPanel.style.position = 'absolute';
+}
+export function showAdminPanel() {
+  vars.divAdminPanel.style.visibility = 'visible';
+  vars.divAdminPanel.style.position = 'relative';
 }
