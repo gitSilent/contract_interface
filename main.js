@@ -21,13 +21,13 @@ import { fillSelectCategories } from "./src/fillSelectCategories.js";
 import { createEmptyOption } from "./src/createEmptyOption.js";
 console.log("hi");
 
-let contractAddress = "0x413E10df04401348639B4bD4B7fEa48D2bd0D5A8";
+let contractAddress = "0x68CC07718A51e40e0f503F17560be7B333eC6136";
 
 let web3, contractInstance, curUser;
 let catNames, patternNames;
 
 function network() {
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
   console.log(web3);
   console.log("u connected to blockchain");
   contractInstance = new web3.eth.Contract(vars.abi, contractAddress);
@@ -108,6 +108,20 @@ getAccounts();
     enterAccount(user, localStorage.getItem("currentUser"), userBalance);
     if (user.role == "admin") {
       showAdminPanel();
+      getAccounts().then((arr) => {
+        fillSelectAddresses(vars.selectVoting, arr, contractInstance);
+      });
+
+      contractInstance.methods.getPromotionArr().call()
+      .then((arr)=>{
+        let arrPromoted = [];
+        arr.forEach((el)=>{
+          arrPromoted.push(el.promoted)
+          // console.log(el.promoted)
+        })
+        console.log(arr)
+        fillSelectAddresses(vars.selectPromoted, arrPromoted, contractInstance)
+      })
     } else{
       hideAdminPanel();
     }
@@ -192,22 +206,36 @@ vars.btnAddTransact.addEventListener("click", () => {
 });
 
 vars.btnSendTransactions.addEventListener("click", async () => {
-  hideCreateTransact();
-  await contractInstance.methods
-    .createTransaction(
-      vars.inputRecieverAddress.value,
-      web3.utils.toWei(vars.inputTransactionSum.value, "ether"),
-      vars.inputCodeWord.value,
-      vars.inputCheckboxSafetyTransact.checked,
-      vars.inputDesc.value
-    )
-    .send({
-      from: curUser,
-      value: web3.utils.toWei(vars.inputTransactionSum.value, "ether"),
-      gas: 3000000,
-    });
-  console.log("clicked send");
-  location.reload();
+  try{
+    if(vars.selectCategory.options[vars.selectCategory.selectedIndex].value == "none"){
+      return alert("Выберите категорию")
+    } else if(!vars.inputCodeWord.value.trim().length){
+      return alert("Введите кодовое слово")
+    }else{
+      hideCreateTransact();
+      await contractInstance.methods
+        .createTransaction(
+          vars.inputRecieverAddress.value,
+          web3.utils.toWei(vars.inputTransactionSum.value, "ether"),
+          vars.selectCategory.options[vars.selectCategory.selectedIndex].label,
+          vars.inputCodeWord.value,
+          vars.inputCheckboxSafetyTransact.checked,
+          vars.inputDesc.value
+        )
+        .send({
+          from: curUser,
+          value: web3.utils.toWei(vars.inputTransactionSum.value, "ether"),
+          gas: 3000000,
+        });
+      console.log("clicked send");
+      location.reload();
+    }
+  }catch(er){
+    console.log(er);
+    alert("Проверьте правильность заполнения полей")
+  }
+  
+  
 });
 
 vars.imgAllTransactCross.addEventListener("click", hideAllTransactions);
@@ -245,6 +273,7 @@ vars.regRegBtn.addEventListener("click", () => {
 });
 
 vars.selectCategory.addEventListener("change", () => {
+
   vars.selectPattern.innerHTML = "";
   vars.selectPattern.append(
     (() => {
@@ -299,6 +328,45 @@ vars.btnConfirmTransact.addEventListener('click', ()=>{
   .then((value)=>{
     console.log(value)
   })
+})
+
+vars.btnStartVoting.addEventListener("click", async()=>{
+  let choosenUser = vars.selectVoting.options[vars.selectVoting.selectedIndex];
+  if(choosenUser.value != "title"){
+    // await contractInstance.methods.startPromotionVoting(choosenUser.label).send({from: curUser})
+
+    let arrPromotions = await contractInstance.methods.getPromotionArr().call()
+    console.log(arrPromotions)
+    
+    let allowStartVoting = true;
+    arrPromotions.forEach((el)=>{
+      console.log(el.promoted)
+      if(el.active && el.promoted == choosenUser.label){
+        alert("Этот пользователь уже есть в списке голосований")
+        allowStartVoting = false;
+        return 
+      }
+    })
+
+    if(allowStartVoting){
+      console.log("начать голосование")
+    }else{
+      console.log("не начать голосование")
+    }
+
+  } else{
+    console.log("ypu should choose user")
+  }
+})
+
+
+
+vars.btnToVote.addEventListener('click', ()=>{
+  let choosenUser = vars.selectPromoted.options[vars.selectPromoted.selectedIndex];
+  if(choosenUser.value != "title"){
+    contractInstance.methods.toVote // переделать
+  }
+  console.log(choosenUser)
 })
 /**
  * @type {HTMDivLElement}

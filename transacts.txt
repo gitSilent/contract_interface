@@ -19,6 +19,7 @@ contract transactions{
         bool activeTransaction;
         bool moneyWasSended;
         string codeWord;
+        string category_name;
         uint attemptsQty;
         bool confirmedByWord;
         bool safetyTransactionStatus;
@@ -58,12 +59,12 @@ contract transactions{
     uint public qtyAdmins;
 
     constructor() payable{
-        users[0x9C9fb66f39dD515F2f74a927117c9301Cfd97b0B] = User("1234","admin");
-        users[0xbEA0bd7baABE72d65C5bdE4e292EDA6E8eE31b5e] = User("1234","admin");
+        users[0x39a7e6904851931F6281Cf283Eec2B6794157672] = User("1234","admin");
+        users[0x1d339D9492A9c91dd97fC524E98FE0DdF3099A9C] = User("1234","admin");
 
-        users[0x08D8A4EED76125E8ecFa5d8808B9AC96eB81510a] = User("1234","user");
-        users[0xD446FAE2fF7752eBF3fe379c48cF606E7691E8Bb] = User("1234","user");
-        users[0x0B296b8665f919410E9f75E97A5b2fD0b8742cC3] = User("1234","user");
+        users[0xe18d9EBD2DD6341C8892146dDb822db3ab41cEdA] = User("1234","user");
+        users[0x555B13e119c879226A01CF0D58180E2A58F1E426] = User("1234","user");
+        users[0x340C4B6ccBE7A23B8c04C3bebAcf82B3C6757E96] = User("1234","user");
 
         qtyAdmins = 2;
         
@@ -114,13 +115,13 @@ contract transactions{
         users[changingUserAddress].role = "admin";
     }
 
-    function createTransaction(address receiverAddress, uint transactionSum, string memory codeWord, bool safetyTransactionStatus, string memory transationDescription) public payable {
+    function createTransaction(address receiverAddress, uint transactionSum, string memory category_name, string memory codeWord, bool safetyTransactionStatus, string memory transationDescription) public payable {
         // require(address(msg.sender).balance > transactionSum, "not enough money");
         // require(balance > transactionSum, "not enough money on the contract");
         require(keccak256(bytes(users[msg.sender].role)) == keccak256(bytes("user")) || keccak256(bytes(users[msg.sender].role)) == keccak256(bytes("admin")), "this user is unregistred");
         require (receiverAddress != msg.sender, "you can't send money to yourself");
         // require (address(msg.sender).balance > transactionSum, "you don't have enough money to execute a transaction"); 
-        transactionsHistory.push(Transaction(receiverAddress, msg.sender, transactionSum, true, false, codeWord,3, false, safetyTransactionStatus,false, transationDescription));
+        transactionsHistory.push(Transaction(receiverAddress, msg.sender, transactionSum, true, false, codeWord, category_name, 3, false, safetyTransactionStatus,false, transationDescription));
     }
     function receiveTransaction(uint idTransaction, string memory enteredCodeWord ) public payable{
         require(transactionsHistory[idTransaction].activeTransaction == true, "This transaction is not active");
@@ -233,6 +234,13 @@ contract transactions{
     function getPatNames() public view returns (string[][] memory){
         return patterns_names;
     }
+    function createCategoryPattern(string memory category_name, string memory pattern_name, uint[] memory arr) public {
+        categories[category_name][pattern_name] = arr;
+
+    }
+    function createCategory(string memory category_name) public {
+        categories[category_name]["none"] = [1];
+    }
     // function getTransactionHistory() public view returns(Transaction[] memory){
     //     return(transactionsHistory);
     // }
@@ -241,8 +249,8 @@ contract transactions{
     //     return(categories_names);
     // }
 
-    // function getCategory(string categ_name) public view returns(){
-        
-    // }
+    function getCategory(string memory categ_name) public view returns(string[][] memory){
+        return (categories[categ_name]["none"]);
+    }
 
 }

@@ -17,6 +17,7 @@ export function fillReceiveTransaction(arrTransacts,web3){
     <h2>Транзакция №${gotIdTransaction}</h2>
       <p class="field-receiver">Получатель: ${arrTransacts[gotIdTransaction].receiverAddress}</p>
       <p class="field-sender">Отправитель: ${arrTransacts[gotIdTransaction].senderAddress}</p>
+      <p class="field-sender">Категория: ${arrTransacts[gotIdTransaction].category_name}</p>
       <p class="field-sum">Сумма: ${arrTransacts[gotIdTransaction].transactionSum} wei (${web3.utils.fromWei(arrTransacts[gotIdTransaction].transactionSum, 'ether')} eth)</p>
       <p class="field-active-status">Статус активности: ${arrTransacts[gotIdTransaction].activeTransaction}</p>
       <p class="field-sended">Деньги отправлены: ${arrTransacts[gotIdTransaction].moneyWasSended}</p>
