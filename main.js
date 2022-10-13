@@ -8,8 +8,13 @@ import {
   hideAllTransactions,
   showAllTransactions,
   hideReceiveTransaction,
+  showAdminButton,
+  hideAdminPanel,
+  showModalVoting,
+  hideModalVoting,
+  showModalAddPattern,
   showAdminPanel,
-  hideAdminPanel
+  hideAdminButton
 } from "./src/hideShowElements.js"; // импорт функций для отображения/скрытия окна авторизации, входа в аккаунт(отдельно) и регистрации(отдельно)
 import * as vars from "./src/variables.js"; // импорт констант с querySelector
 import { createAdminPanel } from "./src/createAdminPanel.js";
@@ -17,14 +22,20 @@ import { fillAllTransactions } from "./src/fillAllTransactions.js";
 import { fillUserTransactions } from "./src/fillUserTransactions.js";
 import { fillSelectAddresses } from "./src/fillSelectAddresses.js";
 import { cancelTransactionEvent } from "./src/cancelTransactionEvent.js";
-import { fillSelectCategories } from "./src/fillSelectCategories.js";
+import { fillSelectCategories,fillSelectPatterns,fillPatternsSums } from "./src/fillSelectCategories.js";
 import { createEmptyOption } from "./src/createEmptyOption.js";
+import {fillSelectForChoosePromoting} from "./src/fillSelectForChoosePromoting.js"
+import { fillSelectOnlyUsers } from "./src/fillSelectOnlyUsers.js";
+import {fillVotingItem} from "./src/fillVotingItem.js"
+import {getCatNames, getPatNames, getPatSums} from "./src/interactWithCategories_Patterns.js"
+import {fillModalAddPattern} from "./src/fillModalAddPattern.js"
 console.log("hi");
 
-let contractAddress = "0x68CC07718A51e40e0f503F17560be7B333eC6136";
+let contractAddress = "0xB76DdAB0034f7ea075C455422E0676A4847aD9cf";
 
 let web3, contractInstance, curUser;
 let catNames, patternNames;
+let arrPromotions;
 
 function network() {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
@@ -51,6 +62,7 @@ function enterAccount(user, adr, balance) {
   vars.userBalance.textContent = `Ваш баланс ${balance} eth`;
   console.log("func");
 }
+
 function getAllTransacts() {
   return contractInstance.methods
     .getTransactionsHistoryArr()
@@ -60,7 +72,7 @@ function getAllTransacts() {
     });
 }
 
-function receiveTransactionEvent() {
+function receiveTransactionEvent() { //функция получения транзакции
   let h2Text = event.target.closest("div").querySelector("h2").textContent;
   let gottenId = parseInt(h2Text.match(/\d+/));
 
@@ -69,13 +81,10 @@ function receiveTransactionEvent() {
     .querySelector(".field-sum").textContent;
   let gottenSum = parseInt(h2Sum.split(":")[1]);
 
-  console.log(gottenSum);
 
-  console.log(parseInt(h2Text.match(/\d+/)));
 
   let insertedCodeWord = vars.inputRecieveCodeWord();
 
-  console.log(insertedCodeWord.value);
 
   contractInstance.methods
     .receiveTransaction(gottenId, insertedCodeWord.value)
@@ -95,51 +104,59 @@ getAccounts();
 //функция для стартовой отрисовки страницы в зависимости от нахождения в localStorage данных о текущем пользователе
 //если функция не находит в localStorage адреса пользователя, то отрисовывает окно авторизации
 (async () => {
+  getCatNames(contractInstance);
+  getPatNames(contractInstance);
+  getPatSums(contractInstance);
+
   try {
+    arrPromotions = await contractInstance.methods.getPromotionArr().call() //присвоение массива голосования
+
     curUser = localStorage.getItem("currentUser");
 
-    let userBalance = await web3.eth.getBalance(curUser);
+    let userBalance = await web3.eth.getBalance(curUser); // получение баланса пользователя
     userBalance = web3.utils.fromWei(userBalance);
 
-    let user = await contractInstance.methods
+    let user = await contractInstance.methods //получение объекта пользователя
       .getUser(curUser)
       .call({ from: curUser });
 
-    enterAccount(user, localStorage.getItem("currentUser"), userBalance);
+    enterAccount(user, localStorage.getItem("currentUser"), userBalance);//функция входа в аккаунт
+
     if (user.role == "admin") {
-      showAdminPanel();
+      showAdminButton();
       getAccounts().then((arr) => {
-        fillSelectAddresses(vars.selectVoting, arr, contractInstance);
+        fillSelectOnlyUsers(vars.selectVoting, arr, contractInstance);
       });
 
       contractInstance.methods.getPromotionArr().call()
       .then((arr)=>{
         let arrPromoted = [];
         arr.forEach((el)=>{
-          arrPromoted.push(el.promoted)
-          // console.log(el.promoted)
+          arrPromoted.push(el)
+          console.log(el.promoted)
         })
         console.log(arr)
-        fillSelectAddresses(vars.selectPromoted, arrPromoted, contractInstance)
+        fillSelectForChoosePromoting(vars.selectPromoted, arrPromoted, contractInstance)
       })
+
     } else{
       hideAdminPanel();
+      hideAdminButton();
+
     }
     
-    catNames = await contractInstance.methods.getCatNames().call();
-    patternNames = await contractInstance.methods.getPatNames().call();
-    fillSelectCategories(catNames, patternNames);
+    fillSelectCategories(contractInstance);
 
-    console.log("async");
-    console.log(user);
+    
   } catch(er) {
-    console.log(er)
-    console.log("catch");
+    hideAdminButton();
     showAuthorization();
     getAccounts().then((arr) => {
       fillSelectAddresses(vars.selectAuth, arr, contractInstance);
     });
   }
+  document.querySelector(".layer-preload").style.visibility = "hidden";
+
 })();
 
 getAllTransacts().then((arr) => {
@@ -169,24 +186,25 @@ vars.authForm.addEventListener("submit", async () => {
     console.log("wrong password or/and login");
   }
 });
-
-vars.authRegBtn.addEventListener("click", showRegistration);
 // событие на кнопку Регистрации на странице Авторизации
+vars.authRegBtn.addEventListener("click", showRegistration);
 
+// событие на кнопку Войти на странице Регистрации
 vars.regEnterBtn.addEventListener("click", () => {
   showLogining();
 });
-// событие на кнопку Войти на странице Регистрации
 
+// событие на кнопку Выход на странице аккаунта пользователя
 vars.btnExit.addEventListener("click", () => {
   showAuthorization();
+  hideAdminButton();
   getAccounts().then((arr) => {
     fillSelectAddresses(vars.selectAuth, arr, contractInstance);
   });
   vars.tableBodyUserTransactions.innerHTML = "";
 });
-// событие на кнопку Выход на странице аккаунта пользователя
 
+//событие на кнопку Показать все транзакции
 vars.btnShowAllTranasctions.addEventListener("click", async () => {
   console.log("__________");
   getAllTransacts().then((arr) => {
@@ -196,6 +214,7 @@ vars.btnShowAllTranasctions.addEventListener("click", async () => {
   console.log("__________");
 });
 
+//событие на крестие модального окна добавления транзакции
 vars.imgAddTransactCross.addEventListener("click", hideCreateTransact);
 
 vars.btnAddTransact.addEventListener("click", () => {
@@ -235,14 +254,15 @@ vars.btnSendTransactions.addEventListener("click", async () => {
     alert("Проверьте правильность заполнения полей")
   }
   
-  
 });
 
+vars.imgCrossAdminPanel.addEventListener('click', hideAdminPanel)
+vars.btnShowAdminPanel.addEventListener('click', showAdminPanel)
+//событие на крестие модального окна отображения всех транзакций
 vars.imgAllTransactCross.addEventListener("click", hideAllTransactions);
-vars.imgModalReceiveTransactionCross.addEventListener(
-  "click",
-  hideReceiveTransaction
-);
+
+//событие на крестие модального окна получения транзакции
+vars.imgModalReceiveTransactionCross.addEventListener("click", hideReceiveTransaction);
 
 vars.btnReceiveTransaction.addEventListener("click", () => {
   receiveTransactionEvent();
@@ -275,6 +295,16 @@ vars.regRegBtn.addEventListener("click", () => {
 vars.selectCategory.addEventListener("change", () => {
 
   vars.selectPattern.innerHTML = "";
+  vars.selectSum.innerHTML = "";
+
+  vars.selectSum.append(
+    (() => {
+      let option = createEmptyOption();
+      option.label = "Выберите сумму";
+      return option;
+    })()
+  );
+
   vars.selectPattern.append(
     (() => {
       let option = createEmptyOption();
@@ -282,13 +312,7 @@ vars.selectCategory.addEventListener("change", () => {
       return option;
     })()
   );
-
-  patternNames[event.target.value].forEach((val) => {
-    let option = document.createElement("option");
-    option.label = val;
-
-    vars.selectPattern.append(option);
-  });
+  fillSelectPatterns(vars.selectCategory.value)
 });
 vars.selectPattern.addEventListener("change", async () => {
   vars.selectSum.innerHTML = "";
@@ -300,22 +324,8 @@ vars.selectPattern.addEventListener("change", async () => {
       return option;
     })()
   );
-
-  let cat = vars.selectCategory;
-  let pat = vars.selectPattern;
-  console.log(cat.options[cat.selectedIndex].label);
-  let choosenCategory = cat.options[cat.selectedIndex].label;
-  let choosenPattern = pat.options[pat.selectedIndex].label;
-
-  let sumArray = await contractInstance.methods
-    .getPatternArray(choosenCategory, choosenPattern)
-    .call();
-  sumArray.forEach((val) => {
-    let option = document.createElement("option");
-    option.label = val;
-
-    vars.selectSum.append(option);
-  });
+fillPatternsSums(vars.selectCategory.value,vars.selectPattern.value,vars.selectSum.value)
+  
 });
 vars.selectSum.addEventListener("change", () => {
   vars.inputTransactionSum.value =
@@ -333,9 +343,9 @@ vars.btnConfirmTransact.addEventListener('click', ()=>{
 vars.btnStartVoting.addEventListener("click", async()=>{
   let choosenUser = vars.selectVoting.options[vars.selectVoting.selectedIndex];
   if(choosenUser.value != "title"){
-    // await contractInstance.methods.startPromotionVoting(choosenUser.label).send({from: curUser})
 
-    let arrPromotions = await contractInstance.methods.getPromotionArr().call()
+
+    // arrPromotions = await contractInstance.methods.getPromotionArr().call()
     console.log(arrPromotions)
     
     let allowStartVoting = true;
@@ -350,6 +360,10 @@ vars.btnStartVoting.addEventListener("click", async()=>{
 
     if(allowStartVoting){
       console.log("начать голосование")
+      await contractInstance.methods.startPromotionVoting(choosenUser.label).send({from: curUser})
+      location.reload()
+
+
     }else{
       console.log("не начать голосование")
     }
@@ -364,25 +378,36 @@ vars.btnStartVoting.addEventListener("click", async()=>{
 vars.btnToVote.addEventListener('click', ()=>{
   let choosenUser = vars.selectPromoted.options[vars.selectPromoted.selectedIndex];
   if(choosenUser.value != "title"){
-    contractInstance.methods.toVote // переделать
+    showModalVoting()
+    fillVotingItem(arrPromotions,choosenUser.label,contractInstance,curUser);
+    // contractInstance.methods.toVote // переделать
   }
   console.log(choosenUser)
 })
+
+vars.btnAddCategory.addEventListener('click', ()=>{
+  let insertedCategName = prompt("Введите название новой категории")
+
+  contractInstance.methods.createNewCategory(insertedCategName).send({from:curUser})
+  .then((val)=>{
+    console.log(val)
+    location.reload()
+  })
+
+})
+vars.btnAddPattern.addEventListener('click', ()=>{
+  fillModalAddPattern()
+
+  fillSelectCategories(contractInstance)
+  showModalAddPattern()
+
+
+})
+
 /**
  * @type {HTMDivLElement}
  */
 const modal = document.querySelector(".layer-modal-addTransaction");
-
-// document.addEventListener("keydown", (evt) => {
-//   if (evt.key === "Escape") {
-//     console.dir(modal);
-//     if (!modal.style.display) {
-//       modal.style.display = "none";
-//     } else {
-//       modal.style.display = "";
-//     }
-//   }
-// });
 
 console.log(contractInstance, contractInstance.methods);
 // console.log(contractInstance, contractInstance.methods.transactionHistory());
@@ -414,12 +439,3 @@ contractInstance.methods
   .then((result) => {
     console.log(result);
   });
-
-// console.log(contract_name.getTransactionHistory())
-
-// (async() => {
-// 	console.log(await contractInstance.methods.users("0xc3d05f966BAE416Bd72Abc62ed81A5096F0E5FaA").call())
-
-// console.log(result);
-
-// })()

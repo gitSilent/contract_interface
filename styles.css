@@ -16,6 +16,59 @@ body {
     overflow-y: hidden;
 
 }
+.layer-preload{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgb(207, 205, 228);
+    background: linear-gradient(90deg, rgba(207, 205, 228, 1) 0%, rgba(213, 193, 236, 1) 100%);
+    z-index: 5;
+}
+.preloader-5 {
+    display: block;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 30px auto;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #337AB7;
+    animation: preloader-5-spin 2s linear infinite;
+
+    margin-top: 25%;
+}
+.preloader-5:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #BFE2FF;
+    animation: preloader-5-spin 3s linear infinite;
+}
+.preloader-5:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #337AB7;
+    animation: preloader-5-spin 1.5s linear infinite;
+}
+@keyframes preloader-5-spin {
+    0%   {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 .user-address, .user-role, .user-balance{
     margin-top: 10px;
     margin-left: 10px;
@@ -212,7 +265,25 @@ h2{
     margin-left: 10px;
     width: max-content;
 }
-
+.btn-showAdminPanel{
+    width: 210px;
+    margin-left: 10px;
+    margin-top: 10px;
+    background-color: rgb(187, 48, 141);
+}
+.btn-showAdminPanel:hover{
+    background-color: rgb(129, 36, 98);
+}
+.layer-adminPanel{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.466);
+    padding-top: 100px;
+    z-index: 1;
+}
 .user-transactions{
     margin-top: 100px !important;
     max-width: fit-content;
@@ -277,15 +348,170 @@ td{
     padding-right: 10px;
 }
 .div-adminPanel{
-    margin-top: 30px;
-    margin-left: 10px;
+    margin: 0 auto;
     border: 1px solid rgba(0, 0, 0, 0.24);
     border-radius: 10px;
     width: fit-content;
-    padding: 10px;
+    padding: 50px;
+    background-color: rgb(231, 231, 231);
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 
+.img-cross-adminPanel{
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.img-cross-adminPanel:hover{
+    cursor: pointer;
+}
+
+
+/* _______________________________________________ */
+/* Панель администратора */
+.btn-addCategory, .btn-addPattern{
+    width: 200px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.div-startVoting{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.212);
+    border-radius: 10px;
+    padding: 5px;
+}
+.div-toVote{
+    border: 1px solid rgba(0, 0, 0, 0.212);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+
+
+
+
+
+/* _______________________________________________ */
+/* Модальное окно с информацией для голосования */
+
+.layer-modal-voting{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.466);
+    padding-top: 100px;
+    z-index: 2;
+}
+.modal-voting{
+    border:0;
+    width: 600px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: rgb(238, 238, 238);
+    border-radius: 10px;
+
+    position: relative;
+
+    padding: 50px;
+}
+.img-cross-voting{
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.img-cross-voting:hover{
+    cursor: pointer;
+}
+.p-youVoted{
+    color:#6ac05b;
+}
+.p-youNotVoted{
+    color: orange;
+}
+
+/* _______________________________________________ */
+/* Модальное окно для добавления шаблона */
+.layer-modal-addPattern{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.466);
+    padding-top: 100px;
+    z-index: 2;
+}
+.modal-addPattern{
+    border:0;
+    width: 600px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: rgb(238, 238, 238);
+    border-radius: 10px;
+
+    position: relative;
+
+    padding: 50px;
+}
+.img-cross-modalAddPattern{
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.img-cross-modalAddPattern:hover{
+    cursor: pointer;
+}
+.div-addPattern{
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    width: 500px;
+    margin: 0 auto;
+}
+.div-addPattern h2{
+    margin-bottom: 20px !important;
+}
+.div-addPattern input{
+    margin-bottom: 10px;
+}
+.input-addPattern{
+    width: 300px;
+}
+.input-addPatternSum{
+    width: 50px;
+    font-size: 15px;
+}
+.btn-addExtraSum{
+    width: 25px;
+}
+.btn-addPatternToArr{
+    width: 200px;
+    height: 35px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    padding-top: 9px;
+   
+}
+.btn-addExtraSum{
+    padding-left: 17px;
+    padding-top: 11px;
+}
+.select-category-addPattern{
+    margin-bottom: 10px;
+}
 /* _______________________________________________ */
 /* Модальное окно добавления транзакции */
 .layer-modal-addTransaction{
@@ -356,7 +582,7 @@ td{
 .select-addTransact{
     margin-top: 5px;
     margin-bottom: 5px;
-    height: 50px;
+    height: 30px;
     border: 1px solid rgba(0, 0, 0, 0.199);
     border-radius: 10px;
     font-family: 'Quicksand', sans-serif;

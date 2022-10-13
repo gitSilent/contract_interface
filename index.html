@@ -10,8 +10,13 @@
     <script type="module" src="./src/fillAllTransactions.js"></script>
     <script type="module" src="./src/cancelTransactionEvent.js"></script>
     <script type="module" src="./src/fillSelectAddresses.js"></script>
+    <script type="module" src="./src/fillSelectForChoosePromoting.js"></script>
+    <script type="module" src="./src/fillSelectOnlyUsers.js"></script>
+    <script type="module" src="./src/interactWithCategories_Patterns.js"></script>
+    <script type="module" src="./src/fillVotingItem.js"></script>
     <script type="module" src="./src/fillReceiveTransaction.js"></script>
     <script type="module" src="./src/fillSelectCategories.js"></script>
+    <script type="module" src="./src/fillModalAddPattern.js"></script>
     <script type="module" src="./src/createAdminPanel.js"></script>
     <script type="module" src="./src/hideShowElements.js"></script>
     <script src="./web3_min.js" defer></script>
@@ -24,6 +29,11 @@
     />
   </head>
   <body>
+  
+    
+<div class="layer-preload" style="visibility: visible;">
+  <div class="preloader-5"></div>
+</div>
 <!-- Окно авторизации системе -->
     <div class="auth" style="visibility: hidden">
       <form class="auth-cont">
@@ -64,61 +74,101 @@
       </form>
       <button class="btn-enter-reg bottom_btn">Войти</button>
     </div>
+<!-- Панель администратора -->
+<div class="layer-adminPanel" style="visibility: hidden;">
+  <div class="div-adminPanel">
+    <img src="./src/png/cross.png" alt="" class="img-cross-adminPanel">
+    <h2>Панель администратора</h2>
+    <div class="div-confirmation">
+      <input type="text" class="input-confirmTransact" placeholder="Введите ID транзакции">
+      <button class="btn-confirmTransact btn-usual">Подтвердить транзакцию</button>
+    </div>
 
+    <div class="div-startVoting">
+      <select name="" id="" class="select-voting">
+        <option value="title" disabled="disabled" selected="true">Выберите пользователя</option>
+      </select>
+      <button class="btn-startVoting btn-usual">Начать голосование</button>
+    </div>
+    
+    <div class="div-toVote">
+      <select name="" id="" class="select-promoted">
+        <option value="title" disabled="disabled" selected="true">Выберите пользователя</option>
+      </select>
+      <button class="btn-toVote btn-usual">Проголосовать</button>
+    </div>
+    
+   
+    <button class="btn-addCategory btn-usual">Добавить категорию</button>
+    <button class="btn-addPattern btn-usual">Добавить шаблон</button>
+  </div>
+</div>
 <!-- Окно с аккаунтом пользователя -->
     <div class="user-account" style="visibility: hidden">
       <h2 class="user-address">Адрес пользователя</h2>
       <h3 class="user-role">Ваш статус</h3>
       <h3 class="user-balance">Ваш баланс</h3>
       <button class="add-transact btn-usual">Создать транзакцию</button>
+      <button class="btn-showAdminPanel btn-usual" style="visibility:hidden ;">Открыть панель администратора</button>
 
-      <div class="div-adminPanel" style="visibility: hidden;">
-        <h2>Панель администратора</h2>
-        <div class="div-confirmation">
-          <input type="text" class="input-confirmTransact" placeholder="Введите ID транзакции">
-          <button class="btn-confirmTransact btn-usual">Подтвердить транзакцию</button>
+
+    
+
+  <div class="user-transactions">
+    <h2>Ваши транзакции</h2>
+
+    <table class="transactions">
+      <thead>
+        <th colspan="5">
+          <tr>
+            <td>ID</td>
+            <td>Отправитель/получатель</td>
+            <td>Сумма транзакции</td>
+            <td>Активность транзакции</td>
+            <td>Подтверждение (если активна)</td>
+          </tr>
+
+        </th>
+
+      </thead>
+      <tbody class="table-body-userTransactions">
+        
+      </tbody>
+    </table>
+    
+  </div>
+
+  <button class="btn-showAllTransactions btn-usual">
+    Показать все транзакции
+  </button>
+
+  <button class="btn-exit btn-usual">Выход</button>
+</div>
+
+    
+
+<!-- Модальное окно с информацией для голосования  -->
+    <div class="layer-modal-voting" style="visibility: hidden;">
+      <div class="modal-voting">
+        <!-- <div class="cont-votingInfo">
+          <h2 class="h2-promoted">Голосование за: </h2>
+          <p class="p-activePromotion">true</p>
+          <p class="qtyVoted">0 из 5</p>
+          <div class="cont-alreadyVoted">
+            <p class="p-alreadyVoted"></p>
+          </div> -->
+          <!-- <img src="./src/png/cross.png" alt="" class="img-cross-voting"> -->
         </div>
-        <select name="" id="" class="select-voting">
-          <option value="title" disabled="disabled" selected="true">Выберите пользователя</option>
-        </select>
-        <button class="btn-startVoting">Начать голосование</button>
-
-        <select name="" id="" class="select-promoted">
-          <option value="title" disabled="disabled" selected="true">Выберите пользователя</option>
-        </select>
-        <button class="btn-toVote">Проголосовать</button>
        
       </div>
+    </div>
 
-      <div class="user-transactions">
-        <h2>Ваши транзакции</h2>
-
-        <table class="transactions">
-          <thead>
-            <th colspan="5">
-              <tr>
-                <td>ID</td>
-                <td>Отправитель/получатель</td>
-                <td>Сумма транзакции</td>
-                <td>Активность транзакции</td>
-                <td>Подтверждение (если активна)</td>
-              </tr>
-
-            </th>
-
-          </thead>
-          <tbody class="table-body-userTransactions">
-            
-          </tbody>
-        </table>
-        
+<!-- Модальное окно с добавлением шаблона -->
+    <div class="layer-modal-addPattern" style="visibility:hidden ;">
+      <div class="modal-addPattern">
+        <!-- <input type="text" name="" id="" class="input-addPattern"> -->
+        <!-- <button class="btn-addPatternToArr">Добавить шаблон</button> -->
       </div>
-
-      <button class="btn-showAllTransactions btn-usual">
-        Показать все транзакции
-      </button>
-
-      <button class="btn-exit btn-usual">Выход</button>
     </div>
 
 <!-- Модальное окно с добавлением транзакции -->

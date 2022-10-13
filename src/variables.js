@@ -41,6 +41,19 @@ export const abi = [
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "categ_name",
+				"type": "string"
+			}
+		],
+		"name": "createNewCategory",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "receiverAddress",
 				"type": "address"
@@ -114,6 +127,16 @@ export const abi = [
 	},
 	{
 		"inputs": [],
+		"stateMutability": "payable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "CustomError",
+		"type": "error"
+	},
+	{
+		"inputs": [],
 		"name": "returnMsgValue",
 		"outputs": [
 			{
@@ -150,11 +173,6 @@ export const abi = [
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"inputs": [],
-		"stateMutability": "payable",
-		"type": "constructor"
 	},
 	{
 		"inputs": [
@@ -276,6 +294,19 @@ export const abi = [
 				"internalType": "string[][]",
 				"name": "",
 				"type": "string[][]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getPatSums",
+		"outputs": [
+			{
+				"internalType": "uint256[][][]",
+				"name": "",
+				"type": "uint256[][][]"
 			}
 		],
 		"stateMutability": "view",
@@ -471,6 +502,35 @@ export const abi = [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "patterns_sums",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"name": "promotions",
@@ -630,6 +690,9 @@ export const btnExit = document.querySelector(".btn-exit");
 export const btnShowAllTranasctions = document.querySelector(
   ".btn-showAllTransactions"
 );
+
+export const btnShowAdminPanel = document.querySelector('.btn-showAdminPanel');
+
 export const btnAddTransact = document.querySelector(".add-transact");
 
 export const layerModalAddTransaction = document.querySelector(
@@ -691,13 +754,34 @@ export const selectCategory = document.querySelector('.select-category')
 export const selectPattern = document.querySelector('.select-pattern')
 export const selectSum = document.querySelector('.select-sum')
 
+export const layerAdminPanel = document.querySelector('.layer-adminPanel');
 export const divAdminPanel = document.querySelector(".div-adminPanel");
 export const divConfirmation = document.querySelector(".div-confirmation");
 export const inputConfirmTransact = document.querySelector(".input-confirmTransact");
 export const btnConfirmTransact = document.querySelector(".btn-confirmTransact");
+export const imgCrossAdminPanel = document.querySelector('.img-cross-adminPanel');
 
 export const selectVoting = document.querySelector('.select-voting');
 export const btnStartVoting = document.querySelector('.btn-startVoting');
 
 export const selectPromoted = document.querySelector('.select-promoted');
 export const btnToVote = document.querySelector('.btn-toVote');
+
+export const layerModalVoting = document.querySelector('.layer-modal-voting')
+export const modalVoting = document.querySelector('.modal-voting')
+export const h2Promoted = document.querySelector('.h2-promoted')
+export const pActivePromotion = document.querySelector('.p-activePromotion')
+export const qtyVoted = document.querySelector('.qtyVoted')
+export const contAlreadyVoted = document.querySelector('.cont-alreadyVoted')
+export const pAlreadyVoted = document.querySelector('.p-alreadyVoted')
+export const imgModalVotingCross = document.querySelector('.img-cross-voting')
+export const btnAddPattern = document.querySelector('.btn-addPattern')
+
+export const layerModalAddPattern = document.querySelector('.layer-modal-addPattern')
+export const btnAddCategory = document.querySelector('.btn-addCategory')
+export const modalAddPattern = document.querySelector('.modal-addPattern')
+export const selectCategoryAddPattern = ()=>{
+	return document.querySelector('.select-category-addPattern')
+}
+
+

@@ -61,11 +61,34 @@ export function hideReceiveTransaction(){
 export function showReceiveTransaction(){
 	vars.layerModalRecieveTransaction.style.visibility = 'visible'
 }
-export function hideAdminPanel(){
-	vars.divAdminPanel.style.visibility = 'hidden';
-	vars.divAdminPanel.style.position = 'absolute';
+// export function hideAdminPanel(){
+// 	vars.divAdminPanel.style.visibility = 'hidden';
+// 	vars.divAdminPanel.style.position = 'absolute';
+// }
+export function showAdminButton() {
+	vars.btnShowAdminPanel.style.visibility = 'visible'
+
+  	vars.layerAdminPanel.style.visibility = 'hidden';
+  	vars.layerAdminPanel.style.position = 'absolute';
 }
-export function showAdminPanel() {
-  vars.divAdminPanel.style.visibility = 'visible';
-  vars.divAdminPanel.style.position = 'relative';
+export function hideAdminButton() {
+	vars.btnShowAdminPanel.style.visibility = 'hidden'
+}
+export function showAdminPanel(){
+	vars.layerAdminPanel.style.visibility = 'visible';
+}
+export function hideAdminPanel(){
+	vars.layerAdminPanel.style.visibility = 'hidden';
+}
+export function hideModalVoting(){
+	vars.layerModalVoting.style.visibility = 'hidden';
+}
+export function showModalVoting(){
+	vars.layerModalVoting.style.visibility = 'visible';
+}
+export function hideModalAddPattern(){
+	vars.layerModalAddPattern.style.visibility = 'hidden'
+}
+export function showModalAddPattern(){
+	vars.layerModalAddPattern.style.visibility = 'visible'
 }

@@ -8,7 +8,6 @@ export function fillSelectAddresses(select, arr, contractInstance) {
   option.label = "Выберите пользователя"
   option.value = "title";
   console.log(arr);
-  
   select.append(option)
   arr.forEach((el, index) => {
     let option = document.createElement("option");
@@ -16,7 +15,7 @@ export function fillSelectAddresses(select, arr, contractInstance) {
     option.value = el;
     let account = contractInstance.methods
     .users(el)
-    .call({ from: el })
+    .call()
     .then((result) => {
        account = result;
     })

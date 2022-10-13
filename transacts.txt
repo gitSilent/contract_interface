@@ -48,6 +48,7 @@ contract transactions{
     // Category[] public categories;
     string[] public categories_names;
     string[][] public patterns_names;
+    uint[][][] public patterns_sums;
 
     struct Promotion{
         address promoted;
@@ -58,13 +59,15 @@ contract transactions{
 
     uint public qtyAdmins;
 
-    constructor() payable{
-        users[0x39a7e6904851931F6281Cf283Eec2B6794157672] = User("1234","admin");
-        users[0x1d339D9492A9c91dd97fC524E98FE0DdF3099A9C] = User("1234","admin");
+    error CustomError();
 
-        users[0xe18d9EBD2DD6341C8892146dDb822db3ab41cEdA] = User("1234","user");
-        users[0x555B13e119c879226A01CF0D58180E2A58F1E426] = User("1234","user");
-        users[0x340C4B6ccBE7A23B8c04C3bebAcf82B3C6757E96] = User("1234","user");
+    constructor() payable{
+        users[0xa16ca17882E03119c5F01AcBb529b3C85d505549] = User("1234","admin");
+        users[0xA6C119313024fB92a85da609546Dfe12adD95E1A] = User("1234","admin");
+
+        users[0xa48215Cca2BB0865e335e559E2a4903adc5bBf99] = User("1234","user");
+        users[0xCAd3a65Cd52C08Fabc3F6D7fD9F2C1F4015540E0] = User("1234","user");
+        users[0xD291cD1BC470A27D1F5155082dAeCA3725A91Ed0] = User("1234","user");
 
         qtyAdmins = 2;
         
@@ -97,9 +100,24 @@ contract transactions{
         patterns_names.push(["apartment_payment"]);
         patterns_names.push(["debt_payment"]);
 
+        patterns_sums.push([[10,30,50]]);
+        patterns_sums.push([[70,90]]);
+        patterns_sums.push([[10]]);
+
 
         
     }
+
+    function getCatNames() public view returns(string[] memory){
+        return(categories_names);
+    }
+     function getPatNames() public view returns(string[][] memory){
+        return(patterns_names);
+    }
+     function getPatSums() public view returns(uint[][][] memory){
+        return(patterns_sums);
+    }
+
     function registration(address adr, string memory password) public{
         require (keccak256(bytes(users[adr].role)) == keccak256(bytes("")) ,"this user is registred already" );
 
@@ -182,23 +200,19 @@ contract transactions{
         require(promotions[idPromotion].active == true, "this is votion is already finished");
         for(uint i=0; i < promotions[idPromotion].votes.length; i++){
             if(promotions[idPromotion].votes[i] == msg.sender){
-                return;
+                revert ("You already have voted");
+                // return;
             }
-            // } else if (i == promotions[idPromotion].votes.length - 1 ){
-            //     users[promotions[idPromotion].promoted].role = "admin";
-            //     promotions[idPromotion].active = false;
-            // }
+           
         }
                 promotions[idPromotion].votes.push(msg.sender);
           
                 if(promotions[idPromotion].votes.length  == qtyAdmins ){
                     users[promotions[idPromotion].promoted].role = "admin";
                     promotions[idPromotion].active = false;
+                    qtyAdmins++;
                     return;
-                }
-            
-        
-        // promotions[idPromotion].arr[arr.length] = msg.sender;
+                }        
     }
 
     function getPromotionArr() public view returns(Promotion[] memory){
@@ -211,16 +225,12 @@ contract transactions{
         return (users[userAdr]);
     }
 
-
     function getBalance() public view returns (uint){
         return(address(msg.sender).balance);
     }
      function getContractBalance(address adr) public view returns (uint){
         return(address(adr).balance);
     }
-    // function returnValue() public payable {
-    //     payable (msg.sender).transfer(balance);
-    // }
 
     function returnMsgValue() public payable returns(uint){
         return(msg.value);
@@ -228,29 +238,15 @@ contract transactions{
     function getPatternArray(string memory category, string memory pattern) public view returns(uint[] memory){
         return(categories[category][pattern]);
             }
-    function getCatNames() public view returns (string[] memory){
-        return categories_names;
-    } 
-    function getPatNames() public view returns (string[][] memory){
-        return patterns_names;
-    }
-    function createCategoryPattern(string memory category_name, string memory pattern_name, uint[] memory arr) public {
-        categories[category_name][pattern_name] = arr;
 
+    function createNewCategory(string memory categ_name) public{
+        require (keccak256(bytes(users[msg.sender].role)) == keccak256(bytes("admin")), "you are not an admin");
+        categories_names.push(categ_name);
     }
-    function createCategory(string memory category_name) public {
-        categories[category_name]["none"] = [1];
-    }
-    // function getTransactionHistory() public view returns(Transaction[] memory){
-    //     return(transactionsHistory);
+    // function createNewPattern (uint id_categ, string memory pat_name) public{
+    //     patterns_names[id_categ].push(pat_name);
     // }
-
-    // function getCategoriesNames() public view returns(string[][] memory){
-    //     return(categories_names);
+    // function createNewPatternSums(uint id_categ, uint id_pattern, uint[] memory sums) public{
+    //     patterns_sums[id_categ][id_pattern].push(sums);
     // }
-
-    function getCategory(string memory categ_name) public view returns(string[][] memory){
-        return (categories[categ_name]["none"]);
-    }
-
 }

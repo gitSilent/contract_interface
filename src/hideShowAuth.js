@@ -12,7 +12,7 @@ export function hideAuthorization(){
 }
 export function showAuthorization(){
 	localStorage.removeItem('currentUser')
-
+	vars.user
 	vars.authLayer.style.visibility = 'visible'
 	vars.regLayer.style.visibility = 'hidden'
 
