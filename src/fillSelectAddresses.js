@@ -13,10 +13,21 @@ export function fillSelectAddresses(select, arr, contractInstance) {
     let option = document.createElement("option");
     option.label = el;
     option.value = el;
+
+    contractInstance.methods
+      .users(el)
+      .call()
+      .then((result) => {
+        console.log(el)
+        console.log(result);
+        account = result;
+      });
+
     let account = contractInstance.methods
     .users(el)
     .call()
     .then((result) => {
+      console.log(result)
        account = result;
     })
     .then(()=>{

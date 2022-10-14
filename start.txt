@@ -1,0 +1,3 @@
+geth --datadir ./ --networkid 1547 --http --http.corsdomain "*" --allow-insecure-unlock
+
+call attach.bat

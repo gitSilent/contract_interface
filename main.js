@@ -31,14 +31,14 @@ import {getCatNames, getPatNames, getPatSums} from "./src/interactWithCategories
 import {fillModalAddPattern} from "./src/fillModalAddPattern.js"
 console.log("hi");
 
-let contractAddress = "0xB76DdAB0034f7ea075C455422E0676A4847aD9cf";
+let contractAddress = "0x63Cb53500A70ECc5D471F65D773d1263F8120e21";
 
 let web3, contractInstance, curUser;
 let catNames, patternNames;
 let arrPromotions;
 
 function network() {
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   console.log(web3);
   console.log("u connected to blockchain");
   contractInstance = new web3.eth.Contract(vars.abi, contractAddress);
@@ -47,6 +47,14 @@ function network() {
 
 async function getAccounts() {
   let result = await web3.eth.getAccounts();
+  result.forEach(async(accountAdr)=>{
+    console.log(accountAdr)
+
+    console.log(await web3.eth.personal);
+    // await web3.eth.personal.unlockAccount(accountAdr, "1234");
+
+  })
+  console.log(result)
   return result;
 }
 
@@ -90,7 +98,7 @@ function receiveTransactionEvent() { //функция получения тра�
     .receiveTransaction(gottenId, insertedCodeWord.value)
     .send({
       from: curUser,
-      gas: 3000000,
+      gas: 300000000,
     })
     .then(() => {
       location.reload();

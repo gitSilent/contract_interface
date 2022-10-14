@@ -1,0 +1,32 @@
+{
+  "config": {
+    "chainId": 15,
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "eip160Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0
+  },
+
+  "difficulty": "800",
+  "gasLimit": "800000000000",
+  "alloc": {
+    "0xCA8F6A74f424EB66c8A685215430d700657bbb30": {
+      "balance": "11000000000000000000000"
+    },
+    "0xCEA25f8EE2dF45CbC4B02D9E39c78ba6F4aAdABe": {
+      "balance": "11000000000000000000000"
+    },
+    "0x53FD826F9DCC522533781076181E31BF6A5f1144": {
+      "balance": "11000000000000000000000"
+    },
+    "0x6d18Fd5de1eb1A68cAb51bA7C9B31331F0B58800": {
+      "balance": "11000000000000000000000"
+    },
+    "0xe3E4bf601A41672D90cbbB49f7281c9f01C6e5A8": {
+      "balance": "11000000000000000000000"
+    }
+  }
+}
